@@ -21,16 +21,19 @@
 title: Site under construction
 email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  This site may not look great now. But in the future, it'll still look kind of basic -- because
-  I'm sticking to this basic theme. But I might write some posts, so look forward to that.
-baseurl: /docs/ # the subpath of your site, e.g. /blog
-url: https://tuningdipsw.github.io # the base hostname & protocol for your site, e.g. http://example.com
+  Description also under construction
+
+  Write an awesome description for your new site here. You can edit this
+  line in _config.yml. It will appear in your document head meta (for
+  Google search results) and in your feed.xml site description.
+# baseurl: "" # the subpath of your site, e.g. /blog
 domain: tuningdipsw.github.io
+url: https://tuningdipsw.github.io # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: tuningdipsw
 github_username: tuningdipsw
 
 # Build settings
-remote_theme: pages-themes/midnight
+remote_theme: pages-themes/midnight@v0.2.0
 plugins:
   - jekyll-feed
 
