@@ -1,20 +1,15 @@
 ---
-layout: page
+layout: midnight
 title: About
 permalink: /about/
 ---
 
-Sanity change
+Site under construction.
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+DIP switches were used by arcade games to allow settings like difficulty, cost per play, number of lives, etc.
+[https://wiki.mamedev.org/index.php/DIP_Switches_in_MAME](https://wiki.mamedev.org/index.php/DIP_Switches_in_MAME)
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+More specifically, *Hellsinker.*, the 2008 doujin shmup released by Ruminant's Whimper, uses "TUNING DIPSW" as the alias for its settings menu.
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+The phrase "DIP switch" carries an unfortunate resemblance to another disparaging word, although this was not intended by the author of this site. Let's aim to keep it excellent and mindful.
 
-
-[jekyll-organization]: https://github.com/jekyll

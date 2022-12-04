@@ -1,2 +1,2 @@
 # tuningdipsw.github.io
-GitHub Pages
+Repository for dev's GitHub Pages website on Jekyll.
