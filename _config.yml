@@ -36,6 +36,28 @@ remote_theme: pages-themes/midnight
 plugins:
   - jekyll-feed
   - jekyll-remote-theme
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+collections:
+  authors:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: "authors"
+    values:
+      layout: "author"
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
 
 # Exclude from processing.
 # The following items will not be processed, by default.

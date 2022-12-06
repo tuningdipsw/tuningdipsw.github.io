@@ -1,5 +1,5 @@
 ---
-layout: midnight
+layout: default
 title: About
 permalink: /about/
 ---

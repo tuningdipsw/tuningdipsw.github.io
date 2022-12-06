@@ -3,6 +3,7 @@ layout: post
 title: "Inaugural post"
 date: 2022-12-03 21:08:30 -0000
 categories: misc
+author: minogame
 ---
 This post serves as the first human-generated content on this site. It supplies nearly nothing else.
 
