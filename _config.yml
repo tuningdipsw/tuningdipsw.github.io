@@ -29,6 +29,11 @@ url: https://tuningdipsw.github.io # the base hostname & protocol for your site,
 twitter_username: tuningdipsw
 github_username: tuningdipsw
 markdown: kramdown
+kramdown:
+  syntax_highlighter: coderay
+  syntax_highlighter_opts:
+    line_numbers: table
+    bold_every: 2
 
 # Build settings
 # theme: minima
@@ -42,6 +47,8 @@ plugins:
 collections:
   authors:
     output: true
+
+page_excerpts: true
 
 defaults:
   - scope:
