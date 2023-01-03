@@ -31,9 +31,6 @@ github_username: tuningdipsw
 markdown: kramdown
 kramdown:
   syntax_highlighter: coderay
-  syntax_highlighter_opts:
-    line_numbers: table
-    bold_every: 2
 
 # Build settings
 # theme: minima
@@ -43,12 +40,14 @@ plugins:
   - jekyll-remote-theme
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-paginate
 
 collections:
   authors:
     output: true
 
 page_excerpts: true
+paginate: 5
 
 defaults:
   - scope:

@@ -18,6 +18,7 @@ group :jekyll_plugins do
   gem "jekyll-sitemap"
   gem "jekyll-seo"
   gem "jekyll-feed", "~> 0.12"
+  gem "jekyll-paginate"
 end
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -37,5 +38,5 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 gem "webrick", "~> 1.7"
 
 
-
+# might not need this??
 gem "kramdown-syntax-coderay", "~> 1.0"

@@ -1,7 +1,13 @@
-<nav>
+<nav class="top">
+<table>
+<tr>
   {% for item in site.data.navigation %}
+  <td>
     <a href="{{ item.link }}" {% if page.url == item.link %}class="current"{% endif %}>
       {{ item.name }}
     </a>
+  <td class="gap">
   {% endfor %}
+</tr>
+</table
 </nav>
