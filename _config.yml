@@ -26,6 +26,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 # baseurl: / # the subpath of your site, e.g. /blog
 domain: tuningdipsw.github.io
 url: https://tuningdipsw.github.io # the base hostname & protocol for your site, e.g. http://example.com
+repository: tuningdipsw/tuningdipsw.github.io
 twitter_username: tuningdipsw
 github_username: tuningdipsw
 markdown: kramdown
