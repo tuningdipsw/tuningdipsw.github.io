@@ -1,6 +1,6 @@
 ---
 short_name: minogame
-name: TUNING DIPSW
+name: TUNING DIPSW (minogame)
 position: Site author
 ---
 Although I do plan on using this site professionally at some point, it is still under construction,

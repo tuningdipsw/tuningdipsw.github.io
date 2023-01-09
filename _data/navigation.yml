@@ -2,7 +2,7 @@
   link: /
 - name: About
   link: /about/
-- name: Blog
-  link: /blog.html
-- name: Authors
+- name: Contents
+  link: /table-of-contents.html
+- name: Author
   link: /staff.html

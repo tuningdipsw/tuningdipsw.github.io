@@ -22,6 +22,7 @@ nav {
   font: 14px "Source Sans Pro", "Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif;
   margin: 40px -38px 0 -38px;
   padding: 10px 38px;
+  box-shadow: 0 0 30px rgba(71, 51, 31, 0.05);
 }
 nav table {
   border-collapse: collapse;
@@ -57,10 +58,28 @@ nav.top {
   padding: 20px 0 10px 0;
 }
 
+.section-nav {
+  background-color: #f8f5fc;
+  margin: 5px 5px;
+  padding: 10px 30px;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+  max-width: 35%;
+}
+
 h1 {
   font: 200 60px "Source Sans Pro", Georgia, serif;
-  padding: 50px 0 4px 0;
+  padding: 20px 0 4px 0;
   border-bottom: solid 1px #eee;
+}
+
+.pagetitle {
+  padding: 50px 0 4px 0;
+  color: #1481b8;
+}
+
+hr {
+  border: 1px dashed #d0d0d0;
 }
 
 .section:before {

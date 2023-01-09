@@ -41,12 +41,14 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll-toc
 
 collections:
   authors:
     output: true
 
 page_excerpts: true
+excerpt_separator: <!--more-->
 paginate: 5
 
 defaults:
@@ -60,10 +62,14 @@ defaults:
       type: "posts"
     values:
       layout: "post"
+      toc: true
   - scope:
       path: ""
     values:
       layout: "default"
+
+toc:
+  ordered_list: false
 
 # Exclude from processing.
 # The following items will not be processed, by default.

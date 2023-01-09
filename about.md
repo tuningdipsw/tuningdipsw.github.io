@@ -2,9 +2,9 @@
 layout: default
 title: About
 permalink: /about/
+date: 2023-01-06
 ---
-
-# About
+*Last updated: {{ page.date }}*
 
 <img src="../assets/images/ako-sleep.png">
 
@@ -24,5 +24,5 @@ More specifically, *Hellsinker.*, the 2008 doujin shmup released by Ruminant's W
 uses "TUNING DIPSW" as the alias for its settings menu.
 
 This site took great inspiration (and CSS formatting) from 
-Robert Nystrom's [Game Programming Patterns](https://gameprogrammingpatterns.com/contents.html).
-
+Robert Nystrom's [Game Programming Patterns](https://gameprogrammingpatterns.com/contents.html), an
+excellent resource.
