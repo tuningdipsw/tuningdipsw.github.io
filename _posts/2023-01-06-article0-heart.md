@@ -470,4 +470,4 @@ If you know a better way, don't keep it to yourself. I am not an expert programm
 And there's lots of things I don't know! If the suggestion is good, I'm happy to update the relevant posts 
 with better code or better information. 
 
-<a href="" align="right"> >> Next: #0.5: Preparations</a>
+<a href="/fgtutorial/2023/01/09/article05-preparations.html" align="right"> >> Next: #0.5: Preparations</a>
