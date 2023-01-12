@@ -464,10 +464,11 @@ I'm not going to send you death threats or hire a dark web hitman or whatever, b
 
 ### Why did(n't) you do it like this?
 
-If something isn't clear to you, leave a comment and I'll do my best to answer.
+If something isn't clear to you, leave a comment and I'll do my best to answer. I've added this
+grossly Wikia-looking Disqus integration to this end. I apologize for this affront to your sensibilities.
 
-If you know a better way, don't keep it to yourself. I am not an expert programmer.
-And there's lots of things I don't know! If the suggestion is good, I'm happy to update the relevant posts 
+If you know a better way to do things, feel free to let me know as well. I am not an expert programmer, and
+there's many things I don't know. If the suggestion is good, I'm happy to update the relevant posts 
 with better code or better information. 
 
 <a href="/fgtutorial/2023/01/09/article05-preparations.html" align="right"> >> Next: #0.5: Preparations</a>

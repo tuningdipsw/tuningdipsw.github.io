@@ -1,5 +1,6 @@
 ---
 layout: default
+comments: true
 ---
 <p>
   {{ page.date | date_to_string }}
@@ -14,3 +15,5 @@ layout: default
 </div>
 
 {{ content }}
+
+{% include disqus.html %}
