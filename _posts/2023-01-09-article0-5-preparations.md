@@ -42,10 +42,11 @@ You might run into your first error here. Don't panic, errors are going to happe
 
 - The instructions you're following may be out-of-date, or even outright wrong.  
 - You may have simply mistyped something; maybe you read a 0 (zero) as an O (capital o),
-or your Mac autocorrected a `--` (two hyphens, often used as a flag) into a -- (em dash).
+or your Mac autocorrected a `--` (two hyphens, often used for command-line flag) into a -- (em dash).
 - Maybe you just did something wrong. If it won't take too long, run it again from the beginning
 just to be sure. *(Do a sanity check)*
-- Sometimes your computer is just very strange.
+- Sometimes your computer is just very strange and nothing anyone has suggested works.
+I'm very sorry if you have to go through one of these.
 
 Whatever the case, here's some of the basic steps you should try to solve an error:
 
@@ -56,9 +57,27 @@ Whatever the case, here's some of the basic steps you should try to solve an err
 obviously won't appear in others' questions, so you will likely need to pare down the text a bit.
 - Sometimes the error readout/stack trace will have multiple errors in it. More often than not, you
 only want the one closest to the bottom since it's the one causing the rest of errors, but give the others a skim.
-3. [Read the error again, more carefully this time.](https://twitter.com/b0rk/status/1570463473011920897)
+3. [Stop and read the error again, more carefully this time.](https://twitter.com/b0rk/status/1570463473011920897)
 4. After giving the problem an honest try, ask others for help on StackOverflow or a relevant Discord.
 - [Just the act of trying to cleanly articulate what's wrong may give you insight.](https://en.wikipedia.org/wiki/Rubber_duck_debugging)
+
+<aside>
+<i>"Why are you using Windows?"</i>
+<br>
+<br>
+It's true:
+The fickly-updated, too-user-"friendly" Windows is the root of many, many compatibility issues in programming,
+so most programmers recommend working on Mac or Linux instead for pure coding.
+<br>
+<br>
+However, the inconvenience of booting up Linux on an emulator/another disc on my cheeks laptop
+completely torpedoes my motivation to write articles or code, so I've stubbornly
+arranged my workflow around working past Windows' idiosyncrasies.
+<br>
+<br>
+It is in no way optimal, but it has proven manageable thus far.
+I may switch to Linux someday, but for the time being, this is a compromise I have made to deal with my own mental blocks.
+</aside>
 
 Advice for this error on Windows, if you can't figure it out:
 <p class="spoiler">
@@ -89,7 +108,7 @@ python3 -m pip install -U pygame --user
 
 <aside>
 Although Python 2 is no longer updated, some computers might still default to 2 when running `python`.
-From now on, I will be assuming that `python ...` commands run Python 3.
+I just automatically assume that `python ...` commands run Python 3 at this point.
 You might wish to uninstall Python 2 from your computer or
 <a href="https://stackoverflow.com/questions/20530996/aliases-in-windows-command-prompt">create an
 alias to correct python to python3</a> if you must keep it.
@@ -230,7 +249,6 @@ Let's get started.
 
 ...Next time.
 
-![1koma of Iku Nagae punching her monitor](/assets/images/article05/pewgf.png)
+![1koma of Iku Nagae punching her monitor](/assets/images/article0-5/pewgf.png)
 
-[TODO: EDIT LINK TO #1]
-<a href="/fgtutorial/2023/01/27/article08-rollback-prep.html" align="right"> >> Next: #0.8: Rollback (pre-reading)</a>
+<a href="/fgtutorial/2023/01/27/article0-8-rollback-prep.html" align="right"> >> Next: #0.8: Rollback (pre-reading)</a>

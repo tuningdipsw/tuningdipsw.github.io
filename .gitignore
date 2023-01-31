@@ -6,3 +6,4 @@ _site
 vendor
 **.lock
 .vscode
+_drafts

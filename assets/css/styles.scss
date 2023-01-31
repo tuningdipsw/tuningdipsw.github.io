@@ -18,7 +18,7 @@ body {
 
 nav {
   background: #f0f7fa;
-  color: #85a0ad;
+  color: #6f8894;
   font: 14px "Source Sans Pro", "Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif;
   margin: 40px -38px 0 -38px;
   padding: 10px 38px;
@@ -81,6 +81,17 @@ h1 {
 .spoiler {
   background-color: #000000;
   color: #000000;
+}
+
+.faded {
+  color: #000; /* Fallback for older browsers */
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.rainbow-shadow {
+  letter-spacing: 0.15rem;
+  color: #695074;
+  text-shadow: -1px 1px #ef3550,-2px 2px #f48fb1,-3px 3px #7e57c2,-4px 4px #2196f3,-5px 5px #26c6da,-6px 6px #43a047,-7px 7px #eeff41;
 }
 
 hr {

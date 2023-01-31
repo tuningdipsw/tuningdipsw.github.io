@@ -6,7 +6,7 @@ author: minogame
 toc: true
 ---
 
-[<< Prev: #0.5: Preparations](/fgtutorial/2023/01/09/article05-preparations.html)
+[<< Prev: #0.5: Preparations](/fgtutorial/2023/01/09/article0-5-preparations.html)
 
 Good day. In this series of articles, I'll be attempting to program a simple 2D
 fighting game using the Python game development library Pygame.
@@ -21,14 +21,14 @@ anyone who might be interested in your game, just because you think delay-based 
 
 (Frankly, even if you are a large one, you might not be able to afford to turn those people away either.)
 
-![Flag of the GBVS not-rollback announcement](/assets/images/article08/yikes.jpg)
+![Flag of the GBVS not-rollback announcement](/assets/images/article0-8/yikes.jpg)
 
 *Battle standard of the GBVS not-rollback announcement*
 
 Fortunately, implementing rollback netcode in your game is more than possible as a solo dev.  
 Let's take a look at how.
 
-![Flag of the GBVS rollback announcement](/assets/images/article08/nice.jpg)
+![Flag of the GBVS rollback announcement](/assets/images/article0-8/nice.jpg)
 
 *Battle standard of the GBVS rollback announcement*
 
@@ -61,7 +61,7 @@ You'll need to be able to answer the following questions.
 
 To get our basic understanding of rollback netcode, we turn to the current best article on topic:
 
-[![Image of Infilament's netcode article](/assets/images/article08/infil-article.png)](https://words.infil.net/w02-netcode.html)
+[![Image of Infilament's netcode article](/assets/images/article0-8/infil-article.png)](https://words.infil.net/w02-netcode.html)
 
 - [Infilament's article on rollback netcode.](https://words.infil.net/w02-netcode.html)
 (It's also where I got the links to many of the following resources.)
@@ -227,7 +227,6 @@ For real this time.
 
 But not in this article.
 
-![Iku throws a monitor out of a window](/assets/images/article08/monitor-away.png)
+![Iku throws a monitor out of a window](/assets/images/article0-8/monitor-away.png)
 
-(TODO: Edit in link to next article)
-<a href="/fgtutorial/2023/01/09/article05-preparations.html" align="right"> >> Next: #0.5: Preparations</a>
+<a href="/fgtutorial/2023/01/30/article1-gameloop.html" align="right"> >> Next: #1: Introducing our game loop</a>
