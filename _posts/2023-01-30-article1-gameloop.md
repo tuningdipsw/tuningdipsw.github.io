@@ -6,7 +6,7 @@ author: minogame
 toc: true
 ---
 
-[<< Prev: #0.8: Rollback (Pre-reading)](/fgtutorial/2023/01/27/article08-rollback-prep.html)
+[<< Prev: #0.8: Rollback (Pre-reading)](/fgtutorial/2023/01/27/article0-8-rollback-prep.html)
 
 Good day. In this series of articles, I'll be attempting to program a simple 2D
 fighting game using the Python game development library Pygame.
