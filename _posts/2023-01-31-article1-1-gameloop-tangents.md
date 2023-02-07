@@ -190,5 +190,4 @@ I think it'll be easier to get this right if we stick to a single-threaded appro
 
 ## Go to the next article
 
-TODO: edit in link to #2
-<a href="/fgtutorial/2023/01/09/article05-preparations.html" align="right"> >> Next: #2: Inputs</a>
+<a href="/fgtutorial/2023/02/06/article2-inputs.html" align="right"> >> Next: #2: Inputs</a>

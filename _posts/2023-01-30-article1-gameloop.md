@@ -197,8 +197,6 @@ Next time on <b>FIGHTING GAME P</b>, we'll start by implementing the input proce
 I'm partway through writing it right now and it's certainly getting a little messy, so it promises to be a meaty one.
 I might even have to break it up into multiple parts. So look forward to that.
 
-TODO: edit in link to #2.
-
-<a href="/fgtutorial/2023/01/30/article1-gameloop.html" align="right"> >> Next: #2: Inputs</a>
+<a href="/fgtutorial/2023/02/06/article2-inputs.html" align="right"> >> Next: #2: Inputs</a>
 
 ---

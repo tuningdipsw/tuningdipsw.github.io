@@ -133,11 +133,15 @@ Another option I found for Python is Spyder IDE + Anaconda. I haven't tried this
 recommended to me by [another Pygame tutorial](https://www.patternsgameprog.com/discover-python-and-patterns-1)
 I found very helpful.
 
-Optional things you might like to configure at this point:
+<aside>
+Guides for setting up Python linting and type checking on VSCode:
+<a href="https://code.visualstudio.com/docs/python/linting">(1)</a>
+<a href="https://www.emmanuelgautier.com/blog/enable-vscode-python-type-checking">(2)</a>
+</aside>
 
-- Browse the IDE's interface for useful-looking Python plugins to install.
-- [Configure a Python linter](https://code.visualstudio.com/docs/python/linting) to run whenever you
-save your file.
+Some optional settings or plugins you might like to set up at this point include
+a [linter](https://realpython.com/python-code-quality/#linters)
+or a [type checker](https://realpython.com/python-type-checking/).
 
 ## (Optional) Set up Version Control Software (Git)
 
