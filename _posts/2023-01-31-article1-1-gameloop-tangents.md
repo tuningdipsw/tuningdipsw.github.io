@@ -85,7 +85,7 @@ It might be nice to decouple the timing of frame-rendering from our input proces
 
 - If our game performance suddenly tanks to 15FPS because our antivirus just launched a scheduled scan
 and our computer suddenly doesn't have the resources to lovingly render the sebum glands of (eg.) Mario's nose,
-it kind of suck to see our gameplay (eg. the timing we press buttons to in our combo) slow down to quarter speed.  
+it kind of sucks to see our gameplay (eg. the timing we press buttons to in our combo) slow down to quarter speed.  
 - If we want to implement something like [Tekken 7's cinematic slowdown](https://youtu.be/F6Fx0T_3IWY?t=704),
 we want the speed at which the characters take action to slow down without affecting the visual frame rate.  
 We probably wouldn't want to change the speed at which input parsing is handled during these situations.

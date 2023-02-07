@@ -73,7 +73,7 @@ Some games such as GBVS and Fantasy Strike have also experimented with easier 1-
 We'll be using the most traditional type of special inputs in this game, but I invite you to experiment with this idea.
 </aside>
 
-The fighting game inputs are highly contextual even among fighting games;
+The fighting game inputs are highly contextual even among video games;
 for many moves, the game has to consider our previous inputs as well as our current ones
 in order to determine whether (eg.) 6P should lead to the command normal 6P, or the special move 236P.
 
@@ -264,8 +264,8 @@ or we can check Pygame's event queue for a list of all the key presses and key r
 that have occurred since the last time we checked the queue (ie. called `processInput()`).
 
 As a queue, the event queue method will catch all inputs, even if performance drops.
-If the performance of the game loop drops to 1 FPS, the queue will capture all inputs
-during that frame, while `key.get_pressed()` can only ever capture 1 frames' worth of inputs.
+If the performance of the game loop drops to 1 FPS, the queue will capture all frames' worth of inputs
+during that second, while `key.get_pressed()` can only capture 1 frames' worth of inputs.
 
 However, because it can capture multiple frames' worth of inputs, the logic of `processInput()`
 becomes harder to get right as well. Even if it did only capture one frames' worth of inputs,

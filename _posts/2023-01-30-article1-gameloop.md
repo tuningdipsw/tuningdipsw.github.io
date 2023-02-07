@@ -178,7 +178,7 @@ but it is passable.
 We're going to start off with this naive game loop for now, just so we can get building.
 
 The main thing we're worried about is `render()` being too slow to hit 60FPS and dragging down our game speed,
-but it's not a good idea to spend too much time worrying about performance before it actually appears,
+but it's not a good idea to spend too much time worrying about performance drops before they actually appear,
 at least in a very lightweight, 2D case such as ours.
 
 So we will put the high-level decoupled game loop ideas on hold until it becomes necessary.
