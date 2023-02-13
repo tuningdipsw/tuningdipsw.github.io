@@ -1,6 +1,6 @@
 ---
 title: "Let's make a fighting game #2.1: Unit testing examples"
-date: 2023-02-06 15:00:00 -0000
+date: 2023-02-12 15:00:00 -0000
 category: fgtutorial
 author: minogame
 toc: true

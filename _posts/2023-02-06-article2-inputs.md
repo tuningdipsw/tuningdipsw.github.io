@@ -623,7 +623,7 @@ so I thought I would share something about how I set mine up, and some of the re
 
 It's more of a general Python or programming topic than a Pygame one, but I think it'll be quite helpful to cover.
 
-[>> Next: #2.1: Unit testing examples](/fgtutorial/2023/02/06/article2-1-unit-testing-examples.html)
+[>> Next: #2.1: Unit testing examples](/fgtutorial/2023/02/12/article2-1-unit-testing-examples.html)
 
 ### Article meta
 
