@@ -9,7 +9,7 @@ toc: true
 [<< Prev: #1: Introducing our game loop](/fgtutorial/2023/01/30/article1-gameloop.html)
 
 This is a bit of a side article to article #1 (Introducing our game loop), filled with bits
-I though were ultimately unnecessary to the main tutorial and ended up cutting
+I thought were ultimately unnecessary to the main tutorial and ended up cutting
 during my editing pass.
 
 Here are some fun bits of writing and hopefully informative I couldn't quite bring myself to cut completely.
@@ -190,4 +190,4 @@ I think it'll be easier to get this right if we stick to a single-threaded appro
 
 ## Go to the next article
 
-<a href="/fgtutorial/2023/02/06/article2-inputs.html" align="right"> >> Next: #2: Inputs</a>
+[>> Next: #2: Inputs](/fgtutorial/2023/02/06/article2-inputs.html)

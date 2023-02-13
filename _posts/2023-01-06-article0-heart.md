@@ -483,4 +483,4 @@ If you know a better way to do things, feel free to let me know as well. I am no
 there's many things I don't know. If the suggestion is good, I'm happy to update the relevant posts
 with better code or better information.
 
-<a href="/fgtutorial/2023/01/09/article0-5-preparations.html" align="right"> >> Next: #0.5: Preparations</a>
+[>> Next: #0.5: Preparations](/fgtutorial/2023/01/09/article0-5-preparations.html)

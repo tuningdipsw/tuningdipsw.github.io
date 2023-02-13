@@ -611,9 +611,8 @@ We'll begin tackling this in article #3.
 
 Coming to a blog, which is this one, at a time when it's ready, which is soon (I hope). Look forward to it.
 
-TODO: edit in link to #3
-
-<a href="/fgtutorial/2023/02/01/article3-game-state.html" align="right"> >> Next: #3: Game state</a>
+TODO: edit in link to #3  
+[>> Next: #3: Game state](/fgtutorial/2023/02/01/article3-game-state.html)
 
 ### Bonus: Setting up some unit tests
 
@@ -624,9 +623,7 @@ so I thought I would share something about how I set mine up, and some of the re
 
 It's more of a general Python or programming topic than a Pygame one, but I think it'll be quite helpful to cover.
 
-TODO: edit in link to #2.1
-
-<a href="/fgtutorial/2023/02/01/article2-1-unit-testing-primer.html" align="right"> >> Next: #2.1: Unit testing primer</a>
+[>> Next: #2.1: Unit testing examples](/fgtutorial/2023/02/06/article2-1-unit-testing-examples.html)
 
 ### Article meta
 

@@ -255,4 +255,4 @@ Let's get started.
 
 ![1koma of Iku Nagae punching her monitor](/assets/images/article0-5/pewgf.png)
 
-<a href="/fgtutorial/2023/01/27/article0-8-rollback-prep.html" align="right"> >> Next: #0.8: Rollback (pre-reading)</a>
+[>> Next: #0.8: Rollback (pre-reading)](/fgtutorial/2023/01/27/article0-8-rollback-prep.html)

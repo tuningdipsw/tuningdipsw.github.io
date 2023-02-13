@@ -189,7 +189,7 @@ I've confined that section to #1.1, an appendix article.
 If you'd like to read more about game loops, you can read it there, or consult the
 more expert articles I have cited there.
 
-<a href="/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html" align="right"> >> Optional: #1.1: Game loop tangents</a>
+[>> Optional: #1.1: Game loop tangents](/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html)
 
 ## See you next time
 
@@ -197,6 +197,4 @@ Next time on <b>FIGHTING GAME P</b>, we'll start by implementing the input proce
 I'm partway through writing it right now and it's certainly getting a little messy, so it promises to be a meaty one.
 I might even have to break it up into multiple parts. So look forward to that.
 
-<a href="/fgtutorial/2023/02/06/article2-inputs.html" align="right"> >> Next: #2: Inputs</a>
-
----
+[>> Next: #2: Inputs](/fgtutorial/2023/02/06/article2-inputs.html)

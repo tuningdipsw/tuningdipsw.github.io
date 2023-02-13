@@ -229,4 +229,4 @@ But not in this article.
 
 ![Iku throws a monitor out of a window](/assets/images/article0-8/monitor-away.png)
 
-<a href="/fgtutorial/2023/01/30/article1-gameloop.html" align="right"> >> Next: #1: Introducing our game loop</a>
+[>> Next: #1: Introducing our game loop](/fgtutorial/2023/01/30/article1-gameloop.html)
