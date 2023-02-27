@@ -27,7 +27,7 @@ special move or a command normal (6P).
 
 ## Eventual goals
 
-- **Display inputs on screen.**
+### **Display inputs on screen.**
 
 It may help us to reference how other games show their inputs.
 
@@ -47,7 +47,7 @@ Under Night*'s input display system.* [*(video source)*](https://www.youtube.com
 Does not visually distinguish between invalid or buffered inputs and valid inputs.
 However, showing frame counts to indicate how long the player's inputs remained in each state looks useful.
 
-- **Avoid hardcoding keybinds into our business logic.**
+### **Avoid hardcoding keybinds into our business logic.**
 
 ![+R's key mapping menu](/assets/images/article2/plus-r-key-mapping-gui.png)
 Guilty Gear XXAC+R*'s key mapping menu. For some reason, +R has a keyboard menu that maps to controller keys,*
@@ -58,7 +58,7 @@ so we must avoid hardcoding specific keys into our business logic.
 
 A GUI for setting these keys in-game is a must, but we'll put it off for now.
 
-- **Contextually parse inputs into actions.**
+### **Contextually parse inputs into actions.**
 
 Special inputs are a famous fixture of the fighting game genre, ranging from the simple quarter-circle forward (236) motion
 to the infamous [pretzel motion](https://glossary.infil.net/?t=Pretzel%20Motion) (1632413).
@@ -90,7 +90,7 @@ For the time being, we'll keep the inputs we accept fairly simple. We can refere
 ["Input Requirements"](https://www.dustloop.com/w/BBCF/Miscellaneous#Input_Requirements) for some sensible specs on how to parse
 a special input.
 
-- **Accept buffered inputs.**
+### **Accept buffered inputs.**
 
 An extension of the input system that allows more leniency during combos and defense.
 The leniency of the buffer system varies between games, ranging from generous to
@@ -611,8 +611,7 @@ We'll begin tackling this in article #3.
 
 Coming to a blog, which is this one, at a time when it's ready, which is soon (I hope). Look forward to it.
 
-TODO: edit in link to #3  
-[>> Next: #3: Game state](/fgtutorial/2023/02/01/article3-game-state.html)
+[>> Next: #3: Game state](/fgtutorial/2023/02/26/article3-game-state-1.html)
 
 ### Bonus: Setting up some unit tests
 
@@ -639,3 +638,7 @@ It feels more approachable than throwing a whole GitHub repository at the reader
 Learning to read through one of those is a useful skill, but it's always a bit daunting.
 
 If you have any complaints or feedback about the format, please let me know in the comments below.
+
+---
+
+[>> Next: #3: Game state](/fgtutorial/2023/02/26/article3-game-state-1.html)

@@ -465,5 +465,4 @@ realize that doing so isn't as hard as you might have feared it was.
 
 Let's return to developing our game in article #3.
 
-TODO: edit in link to #3  
-[>> Next: #3: Game state](/fgtutorial/2023/02/01/article3-game-state.html)
+[>> Next: #3: Game state](/fgtutorial/2023/02/26/article3-game-state-1.html)

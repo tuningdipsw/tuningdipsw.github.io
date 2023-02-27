@@ -151,6 +151,11 @@ or looking through the "Releases" section linked on the right sidebar (if the re
 <br>
 If you just want to read the code without running it, the GitHub editor may be better than the base webpage.
 Access it by pressing "." or ">" on the webpage.
+<br>
+<br>
+When I tried to run it myself, I was unable to get two games to connect on the same machine,
+so the game did not run.
+Despite this, it's still a really useful reference.
 </aside>
 
 <a href="https://github.com/rcmagic/DemoFighterWithNetcode">

@@ -188,6 +188,15 @@ That sounds plausible...
 I'm not confident enough in my programming ability to try it, though.  
 I think it'll be easier to get this right if we stick to a single-threaded approach for now.
 
+### Bonus reading
+
+The DemoFighter mentioned in #0.8 borrows a
+[modified game loop](https://github.com/rcmagic/DemoFighterWithNetcode/blob/master/game/RunOverride.lua)
+for LOVE2D/LUA with a fixed timestep and the ability to cap "frame skip" to avoid a spiral of death.
+
+Maybe it solves our problems?  
+I'd have to play around with it a bit more to understand what exactly the frame skip entails.
+
 ## Go to the next article
 
 [>> Next: #2: Inputs](/fgtutorial/2023/02/06/article2-inputs.html)

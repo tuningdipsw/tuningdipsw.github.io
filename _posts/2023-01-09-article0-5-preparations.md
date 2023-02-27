@@ -16,12 +16,15 @@ before we can get started. Let's get our prerequisites sorted out.
 
 <!--more-->
 
-## Install Python (3.10)
+## Install Python
 
 [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
-> **Important:** Install Python **3.10**, as Pygame does not run on Python 3.11 at the time of writing
-[(2022/12/31, confirm on Pygame website)](https://www.pygame.org/wiki/GettingStarted).
+(2023/2/13)
+The original Pygame library was only compatible with Python 3.10, forcing users
+to download a less-recent version of Python,
+but the [Pygame community edition library](https://github.com/pygame-community/pygame-ce)
+that has taken its place is compatible with Python 3.11.
 
 Confirm the installation by running
 
@@ -98,27 +101,26 @@ chances of getting a good answer.
 
 I recommend giving them a read when you have a bit of time.
 
-## Install Pygame
+## (2023/2/12: New) Install Pygame Community Edition
 
-[https://www.pygame.org/wiki/GettingStarted](https://www.pygame.org/wiki/GettingStarted)
+Due to issues with the original Pygame project being able to update to Python 3.11 compatibility,
+a new fork of the Pygame project, [pygame-community](https://github.com/pygame-community/pygame-ce),
+has been adopted to support Python 3.11 and more frequent updates.
 
-```
-python3 -m pip install -U pygame --user
-```
-
-<aside>
-Although Python 2 is no longer updated, some computers might still default to 2 when running `python`.
-I just automatically assume that `python ...` commands run Python 3 at this point.
-You might wish to uninstall Python 2 from your computer or
-<a href="https://stackoverflow.com/questions/20530996/aliases-in-windows-command-prompt">create an
-alias to correct python to python3</a> if you must keep it.
-</aside>
-
-Again, as a sanity check, confirm the installation as detailed on the website.
+[Installation is pretty straightforward:](https://github.com/pygame-community/pygame-ce#installation)
 
 ```
-python -m pygame.examples.aliens
+pip install pygame-ce
 ```
+
+You can uninstall the original pygame if you had it installed; you should not need to adjust any other files.
+
+```
+pip uninstall pygame
+```
+
+Again, as a sanity check, try getting [a quick program](https://pyga.me/docs/#quick-start) to work.
+You might need to install an IDE first, though:
 
 ## Install and configure your IDE of choice
 
