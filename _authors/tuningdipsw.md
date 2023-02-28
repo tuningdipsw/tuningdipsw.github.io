@@ -14,7 +14,7 @@ Programmer of little acclaim.
 For a picture of my real face, or employment details, please see my [LinkedIn](https://www.linkedin.com/in/andrewjchsu) page.  
 For my public programming work, please see my [GitHub](https://github.com/tuningdipsw) page.
 
-My hobbies include fighting games, reading, and writing;  
+My hobbies include fighting games and writing;  
 appropriately, my current side project is a half-tutorial half-devblog series
 on how to code a fighting game with the Pygame library.
 
