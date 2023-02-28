@@ -8,7 +8,7 @@ date: 2023-02-27
 
 ### Note for employers
 
-> See [staff.html](/staff.html) for information about this site's author.
+> See [staff.html](staff.html) for information about this site's author.
 >
 > The code for this site can be found on [GitHub](https://github.com/tuningdipsw/tuningdipsw.github.io).
 
