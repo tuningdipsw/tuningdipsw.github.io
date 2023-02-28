@@ -2,17 +2,19 @@
 layout: default
 title: About
 permalink: /about/
-date: 2023-01-29
+date: 2023-02-27
 ---
 *Last updated: {{ page.date }}*
+
+### Note for employers
+
+> See [staff.html](/staff.html) for information about this site's author.
 
 <img src="../assets/images/ako-sleep.png">
 
 <aside name="dipswitch">
-
 The phrase "DIP switch" carries an unfortunate resemblance to another disparaging word,
 although this was not intended by the author of this site. Let's aim to keep it excellent and mindful.
-
 </aside>
 
 DIP switches were used by arcade games to allow settings like difficulty, cost per play, number of lives, etc.
