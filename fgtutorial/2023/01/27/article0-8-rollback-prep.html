@@ -1,0 +1,372 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Let's make a fighting game #0.8: Rollback (Pre-reading)</title>
+	<link rel="stylesheet" href="/assets/css/styles.css">
+	<link type="application/atom+xml" rel="alternate" href="https://tuningdipsw.github.io/pages/tuningdipsw/feed.xml" title="Home of one of the Hellsinker. players of all time" />
+	<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Let’s make a fighting game #0.8: Rollback (Pre-reading) | Home of one of the Hellsinker. players of all time</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Let’s make a fighting game #0.8: Rollback (Pre-reading)" />
+<meta name="author" content="minogame" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="« Prev: #0.5: Preparations Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. “Rollback netcode”. “GGPO”. “Sajam”. These are the words of the hour when it comes to good netplay, and fighting game players today have raised their standards to the point where the inability to play the game smoothly online is an instant deal-breaker for many. If you’re a small fighting game developer, you cannot afford to turn away anyone who might be interested in your game, just because you think delay-based is good enough. (Frankly, even if you are a large one, you might not be able to afford to turn those people away either.) Battle standard of the GBVS not-rollback announcement Fortunately, implementing rollback netcode in your game is more than possible as a solo dev. Let’s take a look at how. Battle standard of the GBVS rollback announcement" />
+<meta property="og:description" content="« Prev: #0.5: Preparations Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. “Rollback netcode”. “GGPO”. “Sajam”. These are the words of the hour when it comes to good netplay, and fighting game players today have raised their standards to the point where the inability to play the game smoothly online is an instant deal-breaker for many. If you’re a small fighting game developer, you cannot afford to turn away anyone who might be interested in your game, just because you think delay-based is good enough. (Frankly, even if you are a large one, you might not be able to afford to turn those people away either.) Battle standard of the GBVS not-rollback announcement Fortunately, implementing rollback netcode in your game is more than possible as a solo dev. Let’s take a look at how. Battle standard of the GBVS rollback announcement" />
+<link rel="canonical" href="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/27/article0-8-rollback-prep.html" />
+<meta property="og:url" content="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/27/article0-8-rollback-prep.html" />
+<meta property="og:site_name" content="Home of one of the Hellsinker. players of all time" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-01-27T21:08:30+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Let’s make a fighting game #0.8: Rollback (Pre-reading)" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"minogame"},"dateModified":"2023-01-27T21:08:30+00:00","datePublished":"2023-01-27T21:08:30+00:00","description":"« Prev: #0.5: Preparations Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. “Rollback netcode”. “GGPO”. “Sajam”. These are the words of the hour when it comes to good netplay, and fighting game players today have raised their standards to the point where the inability to play the game smoothly online is an instant deal-breaker for many. If you’re a small fighting game developer, you cannot afford to turn away anyone who might be interested in your game, just because you think delay-based is good enough. (Frankly, even if you are a large one, you might not be able to afford to turn those people away either.) Battle standard of the GBVS not-rollback announcement Fortunately, implementing rollback netcode in your game is more than possible as a solo dev. Let’s take a look at how. Battle standard of the GBVS rollback announcement","headline":"Let’s make a fighting game #0.8: Rollback (Pre-reading)","mainEntityOfPage":{"@type":"WebPage","@id":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/27/article0-8-rollback-prep.html"},"url":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/27/article0-8-rollback-prep.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+	<div class="page sidebar">
+    <nav class="top">
+<table>
+<tr>
+  
+  <td>
+    <a href="/" >
+      Home
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/about/" >
+      About
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/table-of-contents.html" >
+      Contents
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/staff.html" >
+      Author
+    </a>
+  <td class="gap">
+  
+</tr>
+</table
+</nav>
+
+    <h1 class="pagetitle">TUNINGDIPSW</h1>
+	<h4>Instructional website for a fighting game developer</h4>
+	<h2> Let's make a fighting game #0.8: Rollback (Pre-reading) </h2>
+	<div class="content">
+    <p>
+  27 Jan 2023
+  
+  
+    - <a href="/authors/tuningdipsw.html">TUNING DIPSW (Andrew Hsu)</a>
+  
+</p>
+
+<div id="table-of-contents">
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#reading">Reading</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#--what-is-rollback-netcode-how-does-it-work">- What is rollback netcode? How does it work?</a></li>
+<li class="toc-entry toc-h3"><a href="#--how-might-rollback-affect-my-game-design-decisions">- How might rollback affect my game design decisions?</a></li>
+<li class="toc-entry toc-h3"><a href="#--what-do-i-need-to-do-in-order-to-support-rollback">- What do I need to do in order to support rollback?</a></li>
+<li class="toc-entry toc-h3"><a href="#hints-on-implementation">Hints on implementation</a></li>
+<li class="toc-entry toc-h3"><a href="#additional-readings-for-modding-an-existing-game">Additional readings for modding an existing game</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#at-last-for-real-this-time">At Last (For Real This Time)</a></li>
+</ul> 
+</div>
+
+<p><a href="/fgtutorial/2023/01/09/article0-5-preparations.html">« Prev: #0.5: Preparations</a></p>
+
+<p>Good day. In this series of articles, I’ll be attempting to program a simple 2D
+fighting game using the Python game development library Pygame.</p>
+
+<p>“Rollback netcode”. “GGPO”. <a href="https://twitter.com/jiyunaJP/status/1616477744556314625">“Sajam”.</a>
+These are the words of the hour when it comes to good netplay, and fighting game players today
+have raised their standards to the point where the inability to play the game
+smoothly online is an instant deal-breaker for many.</p>
+
+<p>If you’re a small fighting game developer, you cannot afford to turn away
+anyone who might be interested in your game, just because you think delay-based is good enough.</p>
+
+<p>(Frankly, even if you are a large one, you might not be able to afford to turn those people away either.)</p>
+
+<p><img src="/assets/images/article0-8/yikes.jpg" alt="Flag of the GBVS not-rollback announcement" /></p>
+
+<p><em>Battle standard of the GBVS not-rollback announcement</em></p>
+
+<p>Fortunately, implementing rollback netcode in your game is more than possible as a solo dev.<br />
+Let’s take a look at how.</p>
+
+<p><img src="/assets/images/article0-8/nice.jpg" alt="Flag of the GBVS rollback announcement" /></p>
+
+<p><em>Battle standard of the GBVS rollback announcement</em></p>
+
+<!--more-->
+
+<h2 id="reading">Reading</h2>
+
+<p>Oh yeah. You’re going to need to do a bunch of reading.
+It’s not enough for your understanding to be that rollback is “good” and “basically magic”,
+because you’re going to have to implement it now.</p>
+
+<p>Fortunately, by making it this far into this series, you’ve already mired yourself in a great big swamp of reading,
+so this will hardly be the worst of it.</p>
+
+<p>The thing to know about rollback netcode is that <strong>implementing it is quite achievable, as long as you</strong>
+<strong>plan your game and development around it from the start.</strong>
+Efforts to retrofit it into already-finished games built on delay-based netcode,
+like <em>Mortal Kombat X</em> and <em>Guilty Gear Xrd</em> are far more daunting.
+But you won’t need to worry about that.</p>
+
+<aside>
+Well, okay, <i>I'll</i> need to be able to answer the following questions.
+<br />
+You might be able to just copy all of my code and scrape on by.
+</aside>
+
+<p>You’ll need to be able to answer the following questions.</p>
+
+<h3 id="--what-is-rollback-netcode-how-does-it-work">- What is rollback netcode? How does it work?</h3>
+
+<p>To get our basic understanding of rollback netcode, we turn to the current best article on topic:</p>
+
+<p><a href="https://words.infil.net/w02-netcode.html"><img src="/assets/images/article0-8/infil-article.png" alt="Image of Infilament's netcode article" /></a></p>
+
+<ul>
+  <li><a href="https://words.infil.net/w02-netcode.html">Infilament’s article on rollback netcode.</a>
+(It’s also where I got the links to many of the following resources.)</li>
+</ul>
+
+<p>There is a <a href="https://www.youtube.com/watch?v=1RI5scXYhK0">companion video</a> talking through the points of the article,
+so if you have trouble picking things up by reading, it might help you to sit through one of those first
+so that you can hopefully understand things a bit better on your read-through.</p>
+
+<p>You still have to read the article though.</p>
+
+<h3 id="--how-might-rollback-affect-my-game-design-decisions">- How might rollback affect my game design decisions?</h3>
+
+<p>Consult <a href="https://words.infil.net/w02-netcode-p6.html">page 6, <em>“Seems like a good time to branch into how the designer can make smart design choices…“</em></a>
+of Infil’s netcode article for some discussion on how visually-discernable rollbacks (rollback artifacts) can be designed around.</p>
+
+<p>However, take note that even older games with very short move startups like GGXXACPR have benefited greatly
+from the addition of rollback netcode. Fast games are still more than playable with rollbacking, so if
+3-frame abare is part of your vision, you don’t have to compromise it because of rollback netcode.</p>
+
+<blockquote>
+  <p>What if the airdash had 2 or 3 frames of stationary or slower moving startup with the same total duration? Your game plays almost identically but the visual artifacts of rollback are way reduced.</p>
+</blockquote>
+
+<p>This note will be useful in either case.</p>
+
+<h3 id="--what-do-i-need-to-do-in-order-to-support-rollback">- What do <em>I</em> need to do in order to support rollback?</h3>
+
+<p><a href="https://twitter.com/CMZinac/status/1181878689270599680">Zinac: Some of the systems affected by rollback’s requirements</a></p>
+
+<blockquote>
+  <ul>
+    <li>Separate gameplay from presentation layer</li>
+    <li>Serializable game state</li>
+    <li>Particle simulation</li>
+    <li>Object lifetime</li>
+    <li>SFX</li>
+    <li>Animation system</li>
+    <li>UI</li>
+    <li>Desync detection</li>
+  </ul>
+</blockquote>
+
+<p><a href="https://twitter.com/mauvecow/status/1182085152010203136">Mauve: Requirements of the rollback-style network model</a></p>
+
+<blockquote>
+  <p>Game must be re-entrant:
+This means that your game has to be structured so that you can run an update,
+<em>without</em> affecting external things like video and sound.
+Separating game logic and game visuals is not always viable, especially in modern 3D engines.</p>
+
+  <p>Again, if you haven’t built for it from the beginning, separating these two can be difficult at best.
+It is not terribly hard in 2d games to just.. not draw things,
+but 3d games often make heavy use of stateful information and it would need to be be fully separated.</p>
+</blockquote>
+
+<p>A pair of short Twitter notes written by engineers experienced with implementing rollback,
+bringing up some areas of concern when building around rollback.</p>
+
+<p>It’s our responsibility to uphold the following:</p>
+
+<ol>
+  <li>Keep the game fully deterministic. Avoid desyncs due to floating point numbers.</li>
+  <li>Implement functions for saving and loading game state.</li>
+  <li>Ensure update and rendering steps are separated in our game loop.</li>
+  <li>Ensure game runs well enough to run several update steps in the space of a single 1/60th of a second.</li>
+  <li>Handle audio properly during rollbacks to prevent sound effect clipping or duplication.</li>
+</ol>
+
+<p>Particle simulation, object lifetime, and animation systems aren’t as problematic for us,
+since we’re not working with an engine that’s inflexible about these things.</p>
+
+<p>I’m not sure how UI applies to our case.</p>
+
+<p>Desync detection might be covered by GGPO, but I am not sure.</p>
+
+<p><a href="https://github.com/pond3r/ggpo/blob/master/doc/DeveloperGuide.md">GGPO’s developer guide</a><br />
+GGPO’s official guidance on how to call the GGPO library.</p>
+
+<aside>
+Python can work with C and C++ libraries using <a href="https://realpython.com/python-bindings-overview/">Python bindings</a>,
+a feature I am not familiar with right now but will speedily be looking at when I actually have to import the GGPO library.
+</aside>
+
+<p>We will be making use of the open-source GGPO library to reduce some of the rollback systems we’ll need to implement.
+With this known-working library available to us, it is largely not worth the time/effort of trying to roll our own.</p>
+
+<h3 id="hints-on-implementation">Hints on implementation</h3>
+
+<ul>
+  <li><a href="https://drive.google.com/file/d/1nRa3cRBQmKj0-SEyrT_1VNOkPOJWNhVI/view">GGPO feature in GDMag</a><br />
+This article mostly retraces the explanations given by the Infil article, but it leaves some short tips for handling audio at the end.</li>
+</ul>
+
+<aside>
+For those unfamiliar with navigating GitHub's web interface,
+you can download the files by either clicking the green "Code" button -&gt; "Download ZIP",
+or looking through the "Releases" section linked on the right sidebar (if the repository has any).
+<br />
+<br />
+If you just want to read the code without running it, the GitHub editor may be better than the base webpage.
+Access it by pressing "." or "&gt;" on the webpage.
+<br />
+<br />
+When I tried to run it myself, I was unable to get two games to connect on the same machine,
+so the game did not run.
+Despite this, it's still a really useful reference.
+</aside>
+
+<p><a href="https://github.com/rcmagic/DemoFighterWithNetcode">
+<img src="https://raw.githubusercontent.com/rcmagic/DemoFighterWithNetcode/master/screenshot.png" width="270" height="200" />
+</a></p>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/rcmagic/DemoFighterWithNetcode"><em>DemoFighterWithNetcode</em> on GitHub</a><br />
+A minimal LOVE2D fighting game demo with netcode by Zinac.<br />
+The code is open-source, for your perusal. It’s a useful reference for some of the various systems we might
+implement in our fighting game, not just the netcode.<br />
+<strong>It has some useful debug options we might want to crib off of.</strong><br />
+<a href="https://www.twitch.tv/videos/493574286">This video demo illustrating how desyncs cause one-sided rollbacks may be of interest.</a></p>
+  </li>
+  <li>
+    <p><a href="http://blog.hypersect.com/rollback-networking-in-inversus/">(Optional) Networking in <em>INVERSUS</em></a><br />
+Developer discusses their own take on implementing rollback.<br />
+Although <em>INVERSUS</em> is not a traditional 2D fighter, I thought their notes on implementing gamestate backups
+and audio segregation were useful.</p>
+  </li>
+  <li>
+    <p><a href="https://www.youtube.com/watch?v=7jb0FOcImdg">(Optional) NRS’ GDC talk on retrofitting rollback into MKX</a><br />
+A long, technical overview of NRS’ implementation, touching a lot on performance.<br />
+Has a lot of details particular to low-level languages (not Python) and heavy game engine stuff (not our sprite-based fighter),
+so it is optional, but quite interesting all the same.</p>
+  </li>
+</ul>
+
+<h3 id="additional-readings-for-modding-an-existing-game">Additional readings for modding an existing game</h3>
+
+<p>These readings are mostly unnecessary for our task of implementing rollback into our new original game,
+but if you are visiting this page to research how to retrofit rollback into an <strong>older</strong> game,
+these readings might be of use. They’re not exactly easy to find with web search, so I’ve taken the liberty of collecting them here.</p>
+
+<ul>
+  <li><a href="https://github.com/super-continent/game-reversing-resources"><strong>Game Hacking Resources</strong></a></li>
+</ul>
+
+<p>Useful primer and resource dump on getting into reverse engineering games, which you will need to do when retrofitting.<br />
+(Unless your work is officially sanctioned by the developers, you will not have access to the source code.)</p>
+
+<ul>
+  <li>
+    <p><strong>Mauve’s writings on writing RollCaster from ~2010-2012</strong></p>
+
+    <ul>
+      <li><a href="https://web.archive.org/web/20180610000516/http://mizuumi.net/2010/10/24/caster-an-unofficial-netplay-client/">(1) Caster, an unofficial netplay client</a></li>
+      <li><a href="https://web.archive.org/web/20180429085318/http://mizuumi.net/2010/11/08/caster-how-its-done/">(2) Caster - How it’s done</a></li>
+      <li><a href="https://web.archive.org/web/20180217125309/http://mizuumi.net/2010/11/27/caster-the-making-of-rollcaster/">(3) Caster - The Making of RollCaster</a></li>
+      <li><a href="https://web.archive.org/web/20170612204733/http://mauve.mizuumi.net/2012/02/05/investigating-rollcasters-desyncs/">(4) Investigating RollCaster’s Desyncs</a></li>
+      <li><a href="https://web.archive.org/web/20180221091132/http://mauve.mizuumi.net/2012/02/22/investigating-rollcasters-timing-issues/">(5) Investigating RollCaster’s timing issues</a></li>
+      <li><a href="https://web.archive.org/web/20180728043303/http://mauve.mizuumi.net/2012/03/08/how-i-didnt-clip-the-sound-effects/">(6) How I didn’t clip the sound effects.</a></li>
+      <li><a href="https://web.archive.org/web/20180824004523/http://mauve.mizuumi.net/2012/07/05/understanding-fighting-game-networking">(7) Understanding Fighting Game Networking</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>(6) is another source on how to handle audio during rollbacks.</p>
+
+<p>Although (7) mostly echoes the rollback explanations from articles above, there are a few important passages worth noting.</p>
+
+<blockquote>
+  <p>You can send multiple frames worth of input data for each frame, so that when one frame gets lost you don’t need to wait for a full resend cycle to complete in order to continue with the game. Input data’s pretty cheap so it doesn’t cost much to include 5-10 frames worth of data in a packet, so might as well include it. This is something that you should pretty much always do.</p>
+
+  <p>[…]</p>
+
+  <p>If one game is running slower than another, dropping a frame here or there, it <strong>cannot</strong> be treated the same as if it were a packet loss. This is because you lose that bonus extra buffer of delay you added to compensate for it, and get effectively nothing of value out of it. Obviously, this isn’t desirable.</p>
+
+  <p>This leads to the most important rule of this sort of network code: The goal is to maintain complete synchronization with the other system. This <strong>includes</strong> performance issues. If one has a drop, this drop must be reflected in the other as well. Always. Anything else will lead to a desynchronization of the intended behavior.</p>
+
+  <p>[…]</p>
+
+  <p>And if you’re wondering, the rule from above regarding keeping synchronization with the other system’s performance must be upheld. If you detect that the other computer is running slowly and has dropped a frame, then you must also wait a frame to keep synchronization, even in a rollback setup. If you don’t do this the two computers will slowly drift out of timing and nobody wants that.</p>
+</blockquote>
+
+<h2 id="at-last-for-real-this-time">At Last (For Real This Time)</h2>
+
+<p>Good. You now know have an idea of what you’ll need to do to support rollback as we begin to code our engine.<br />
+If you don’t, you at least have a list of reading materials you can come back to when you get stuck on that.</p>
+
+<p>With this under our belt, we’re ready to start coding.</p>
+
+<p>At last.</p>
+
+<p>For real this time.</p>
+
+<p><br />
+<br /></p>
+
+<p>But not in this article.</p>
+
+<p><img src="/assets/images/article0-8/monitor-away.png" alt="Iku throws a monitor out of a window" /></p>
+
+<p><a href="/fgtutorial/2023/01/30/article1-gameloop.html">» Next: #1: Introducing our game loop</a></p>
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = "https://tuningdipsw.github.io/fgtutorial/2023/01/27/article0-8-rollback-prep.html";
+	this.page.identifier = "/fgtutorial/2023/01/27/article0-8-rollback-prep.html";
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://tuning-2.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  </body>
+</html>

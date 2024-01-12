@@ -1,0 +1,603 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Let's make a fighting game #0: The heart</title>
+	<link rel="stylesheet" href="/assets/css/styles.css">
+	<link type="application/atom+xml" rel="alternate" href="https://tuningdipsw.github.io/pages/tuningdipsw/feed.xml" title="Home of one of the Hellsinker. players of all time" />
+	<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Let’s make a fighting game #0: The heart | Home of one of the Hellsinker. players of all time</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Let’s make a fighting game #0: The heart" />
+<meta name="author" content="minogame" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame, documenting the process as I do so, working through the problem, the logic, and the code. There might be some arbitrary flavour tangents included as well, as I am not being paid to omit them." />
+<meta property="og:description" content="Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame, documenting the process as I do so, working through the problem, the logic, and the code. There might be some arbitrary flavour tangents included as well, as I am not being paid to omit them." />
+<link rel="canonical" href="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/06/article0-heart.html" />
+<meta property="og:url" content="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/06/article0-heart.html" />
+<meta property="og:site_name" content="Home of one of the Hellsinker. players of all time" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-01-06T21:08:30+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Let’s make a fighting game #0: The heart" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"minogame"},"dateModified":"2023-01-06T21:08:30+00:00","datePublished":"2023-01-06T21:08:30+00:00","description":"Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame, documenting the process as I do so, working through the problem, the logic, and the code. There might be some arbitrary flavour tangents included as well, as I am not being paid to omit them.","headline":"Let’s make a fighting game #0: The heart","mainEntityOfPage":{"@type":"WebPage","@id":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/06/article0-heart.html"},"url":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/06/article0-heart.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+	<div class="page sidebar">
+    <nav class="top">
+<table>
+<tr>
+  
+  <td>
+    <a href="/" >
+      Home
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/about/" >
+      About
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/table-of-contents.html" >
+      Contents
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/staff.html" >
+      Author
+    </a>
+  <td class="gap">
+  
+</tr>
+</table
+</nav>
+
+    <h1 class="pagetitle">TUNINGDIPSW</h1>
+	<h4>Instructional website for a fighting game developer</h4>
+	<h2> Let's make a fighting game #0: The heart </h2>
+	<div class="content">
+    <p>
+  06 Jan 2023
+  
+  
+    - <a href="/authors/tuningdipsw.html">TUNING DIPSW (Andrew Hsu)</a>
+  
+</p>
+
+<div id="table-of-contents">
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#why-are-you-here">Why are you here?</a></li>
+<li class="toc-entry toc-h2"><a href="#awesome-those-words-you-just-wrote-were-truly-gripping-now-onto-the-tutorial">AWESOME, THOSE WORDS YOU JUST WROTE WERE TRULY GRIPPING. NOW ONTO THE TUTORIAL</a></li>
+<li class="toc-entry toc-h2"><a href="#yeah-that-makes-sense">YEAH, THAT MAKES SENSE</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#why-a-2d-fighter">Why a 2D fighter?</a></li>
+<li class="toc-entry toc-h3"><a href="#why-pygame">Why PyGame?</a></li>
+<li class="toc-entry toc-h3"><a href="#can-i-steal-this-code">Can I steal this code?</a></li>
+<li class="toc-entry toc-h3"><a href="#why-didnt-you-do-it-like-this">Why did(n’t) you do it like this?</a></li>
+</ul>
+</li>
+</ul> 
+</div>
+
+<p>Good day. In this series of articles, I’ll be attempting to program a simple 2D
+fighting game using the Python game development library Pygame, documenting the
+process as I do so, working through the problem, the logic, and the code. There
+might be some arbitrary flavour tangents included as well, as I am not being
+paid to omit them.</p>
+
+<!--more-->
+
+<p>…And here’s one coming up fast…!</p>
+
+<p><em>(Note: This is a long one. Feel free to skip to #0.5 or a later segment using
+the Table of Contents above.)</em></p>
+
+<h2 id="why-are-you-here">Why are you here?</h2>
+
+<p><img src="/assets/images/article0/yes-you.png" alt="1koma of a screen pointing at Iku Nagae" /></p>
+
+<aside>
+Keep it down with that "<i>Smash isn't a real fighting game</i>" talk you know
+what I'm talking about
+</aside>
+
+<p>The fighting game genre boasts a storied legacy that few others can match, with
+its <em>Street Fighter</em>s and its <em>Tekken</em>s, its <em>King of Fighters</em> and its <em>Smash Bros</em>.
+And it doesn’t take long for onlookers to understand what a fighting game is about;
+the thrill of combat between two foes standing face-to-face,
+the back-and-forth drama of two rivals going blow-for-blow can pull them in without
+explanation. It’s famous, simple, and it’s been around for quite a long time.
+Between those three factors, I think it is a contender for the most recognizable
+genre there is.</p>
+
+<p>And yet, despite the purchase the fighting game has in our cultural consciousness,
+the fighting game genre has a reputation for being one of the hardest to get into,
+and in recent years, it seems like one that only a handful of big companies dare
+attempt.</p>
+
+<p>Yes, recent fighting games have had their successes, as of late.</p>
+<ul>
+  <li><em>Guilty Gear Strive</em> - <a href="https://www.eventhubs.com/news/2022/aug/10/guilty-gear-1-million/">1 million copies sold.</a></li>
+  <li><em>Tekken 7</em> -<a href="https://www.gematsu.com/2022/12/tekken-7-sales-top-10-million-tekken-series-sales-top-54-million">10 million copies.</a></li>
+  <li><em>Smash Ultimate</em> - <a href="https://www.eventhubs.com/news/2022/may/11/ssbu-sold-28-million-units/">28 million copies.</a></li>
+</ul>
+
+<p>However, this is but a sample of the biggest games, made by the most skilled companies…
+and only of sales, not of playerbase.</p>
+
+<p>I don’t want to bring out the Steam Charts(tm), but
+you don’t have to look far to see how players flock and have flocked to other genres, like the FPS,
+<a href="https://en.wikipedia.org/wiki/The_Sims_Social#Reception">the Facebook game</a>,
+<a href="https://en.wikipedia.org/wiki/Multiplayer_online_battle_arena">the MOBA</a>,
+<a href="https://en.wikipedia.org/wiki/Gacha_game">the gacha game</a>,
+<a href="https://en.wikipedia.org/wiki/PUBG:_Battlegrounds">the battle royale</a>,
+<a href="https://en.wikipedia.org/wiki/Dota_Auto_Chess#Reception">the auto-battler</a>,
+<a href="https://www.youtube.com/watch?v=poGpNrQn6vc">the Vampire Survivors…-like</a>,
+whatever breakout hit you see creating its own genre of derivatives and imitators…</p>
+
+<p>and you might wonder to yourself, why make a fighting game?</p>
+
+<p>Who is going to play my game?</p>
+
+<p>Sometimes I wonder how fighting games are doing. Perhaps you wonder sometimes as well.</p>
+
+<p>The golden age raised a generation of fighting game players we still tell stories about today.
+The arcade generation, the four Japanese gods, those <em>Umehara Fighting Gamers…</em><br />
+The revival era sparked by <em>SF4</em>, too, spawned its own renaissance of competition, where it seemed like
+<em>SF4</em> was the world.<br />
+But those days are behind us, of course.</p>
+
+<p>Now, today, <em>Street Fighter 6</em>, <em>Tekken 8</em>, and <em>Project L</em> loom on the horizon with great promises and
+expectations for each – New mechanics! New characters! Smoother netcode! New <em>old</em> characters! Better
+features, a better package! Photorealistic images of Ryu’s sweat glands! A fresh new intake of players!
+– with the hopes that finally, with this title, the golden age might return again.</p>
+
+<p>…Perhaps.</p>
+
+<p>As multiplayer games, I think fighting games have it rough.</p>
+
+<p>We core fighting gamers
+go into them looking only for their multiplayer, ignoring or downplaying the package, the single-player elements,
+chasing the memory of that fresh new competitive scene we’ve been longing for, just like the one
+that made us fall in love with fighting games…</p>
+
+<p>Soon we’re crying for balance, crying for content, new characters, old characters, calling for the heads of
+the developers… Where’s Mileena, Ed Boon?? Daisuke’s vision, am I right?! When’s rollback, Kamone?!?!
+Oh thank you so very much, Mori…!!!!! Ha… ha ha hahahahahahahaha…!!!</p>
+
+<p>But the modern fighting game had to evolve, has to patch, has to bow to the crashing waves,
+because they live and they die by the love of their playerbase……</p>
+
+<p>The fickle dissatisfaction that can drive a thousand bitchmad Twitter users to call a game dead
+lives in the same heart as the love that lets fifty immovable Discord users continue to boot up and play
+sets with one another, peer to peer, long past the point of end-of-service,
+longer than any developer could realistically dream that their game could be played.</p>
+
+<p>Atop the pile of a thousand defunct live service games (some middling fighters among them), lies that
+enviable summit which the most immortal of fighting games have achieved -<br />
+those that have inspired people to play them into eternity.</p>
+
+<p>Look at <a href="https://www.youtube.com/watch?v=Vh28VMbjkPk"><em>Eternal Fighter Zero</em>’s Latin American community</a>,
+look at <a href="https://www.youtube.com/watch?v=2yT30H8vK2Q">the arcade goer who plays <em>Street Fighter II Turbo</em> every day, for thirty years</a> –
+and I can’t help but think that the core fighting game player has something in them in common
+with a speedrunner.</p>
+
+<p>The pursuit of perfection that drives a player to endlessly hone themselves, the dream of someday becoming
+unbeatable through one’s depth of experience and intimate mastery; that, at least to me, is the romance
+of the fighting game genre – and it abrases with the idea of an eternal revolving door of new fighting games.</p>
+
+<p>Every new fighting game that comes out today must compete, in at least some way, with the decades of
+legacy that comes before it.</p>
+
+<aside>
+The <i>Will it Kill?</i> clip is pretty good though. Actually, there were at least two at the time of writing,
+I misremembered.
+<a href="https://youtu.be/Twq279Rg8pk?t=2707">(1)</a>,
+<a href="https://youtu.be/iXd-HmrcbZc?t=2065">(2)</a>
+</aside>
+
+<p>Your game, if you choose to go through with making it, must do its utmost to make the world care about
+it for even a moment. It’s fighting against <em>Melty Blood Actress Again Current Code</em>, against
+<em>Street Fighter 6</em>, against <del>Yomi</del>…<strong>Y</strong>our <strong>O</strong>nly <strong>M</strong>ove <strong>I</strong>s Hustle; it’s fighting against
+<em>Phantom Breaker Omnia</em>, although this is a game that to my knowledge has little more legacy than its
+<a href="https://www.youtube.com/watch?v=MgQAPDAq3Go">exceptionally camp release date trailer</a>, one
+<em>Vortex Gallery</em> tournament, and a <em>Will it Kill?</em> clip, so this is not an exceptionally high bar to clear.</p>
+
+<aside>
+...until perhaps one day, they let go of even that, and retire from competition, retire from
+fighting games...
+<a href="https://twitter.com/honzogonzo/status/1422224258717999105">to the great retirement home in the sky</a>
+<br />
+<br />
+...I don't think there's any shame in that. However tragic it may be on a distant level, if it's something that
+you've grown out of, if moving on ultimately brings your current self closer to happiness, I cannot
+help but celebrate it with you.
+<br />
+<br />
+Also your hands might explode if you play Naoto for too long
+</aside>
+
+<p>But even supposing that the core fighting game player gives it an honest try, and perhaps even enjoys
+its <a href="https://www.youtube.com/watch?v=Y-b6SbGQSoI">discovery honeymoon</a> –
+In the end, those oldheads, who once were young, who’ve already found the fighting game <em>they</em> love,
+will surely seep back to the embrace of their old lover…</p>
+
+<p>I don’t wish for you to take these musings as doomsaying, that I believe fighting games are dying.<br />
+I don’t believe that fighting games will die.<br />
+There’s so much enthusiasm and passion for them today, in this silver age of rollback netcode and
+(comparatively) positive discourses.<br />
+I think there’ll always be a faction of <em><a href="https://youtu.be/C3q5nSqGXr4?t=92">goinmul</a></em> players who’ll keep
+playing their games for as long as they can. I expect great things from the upcoming generation
+of AAA fighting games.<br />
+But, I’m not convinced that they can sweep the world again like contemporary or future genres have, or will.<br />
+Even though they’re such beautiful games.</p>
+
+<p>When I look around the fighting game space, there’s a lot of things that make me uneasy about its future.</p>
+
+<p><br /></p>
+
+<aside>
+<a href="https://www.youtube.com/watch?v=2ovCHgAPXSc">"This is the hardest time to be a fighting game player"</a>,
+<a href="https://twitter.com/2dJazz/status/1357086600316948480">(2)</a>,
+<a href="https://twitter.com/2dJazz/status/1571867774573768706">(3)</a>
+</aside>
+
+<p>Netplay can be alienating, yet offline play may be uncertain.</p>
+
+<p><br /></p>
+
+<aside>
+<a href="https://twitter.com/ysemulti/status/1273184356186669056">(1)</a>,
+<a href="https://twitter.com/fubarduck/status/1579758025442996224">(2)</a>,
+<a href="https://www.youtube.com/playlist?list=PLExsOrWTHnDYK74QrMSsMBRVTuVy6I9zm">(3)</a>
+</aside>
+
+<p>Arcades are already on their way out,</p>
+
+<p><br /></p>
+
+<aside>
+<a href="https://www.youtube.com/watch?v=k_fm2hCLjVs">"The Smash World Tour Situation is a Big Deal Even for the FGC"</a>,
+<a href="https://www.youtube.com/watch?v=dcmhYEZ_SUY">"The Bigger Culprit in the Smash World Tour Shutdown Hasn't Got Enough Smoke"</a>
+</aside>
+
+<p>the professional scene survives in no small part on the good graces of corporate eatsports interests,</p>
+
+<p><br />
+<br /></p>
+
+<aside>
+<a href="https://twitter.com/nycfurby/status/1587288086177845250">(1)</a>,
+<a href="https://twitter.com/KITVandy/status/1551642913263812608">(2)</a>
+</aside>
+
+<p>and the tremendous effort required to run the events that carry our scene cannot be taken for granted.</p>
+
+<p><br /></p>
+
+<p>Yes. I feel a little uneasy about the future of fighting games.</p>
+
+<p><br />
+<br /></p>
+
+<p>But you don’t care about that.
+<br /></p>
+
+<p>You mustn’t care about that.
+<br /></p>
+
+<p>If you’re here reading this, then you must already want to make a fighting game. You may not be aiming
+to make the next <em>Street Fighter</em>, or a title so successful it earns you ten billion dollars, or a game
+so excellently balanced that will-be oldheads point to it in internet arguments about how amazing/crappy
+the actual next <em>Street Fighter</em> is – but surely, on some level, you must have a love for the game.
+You must have a love for watching two characters speak to one another, through the rule of beasts, and
+that precious spark within you, wishing to make that happen yourself.</p>
+
+<p>I cannot promise that making a fighting game will make you rich, or even that it’s a sustainable way
+to support yourself.<br />
+It is unreasonable to expect that your self-made fighting game will be able to compete with the
+titans of the genre.</p>
+
+<p>Nor can I even say that making a fighting game is a good idea.<br />
+I write this text only because I am less sane than anyone whose judgement might be better.</p>
+
+<p>But if you have a character you want to see expressed through the language of a game –<br />
+<a href="https://www.gematsu.com/2014/11/blazblue-dengeki-bunko-fc-devs-want-make-idolmaster-love-live-fighting-games">a character from a series you love,</a>
+<a href="https://dic.pixiv.net/a/%E3%81%86%E3%81%A1%E3%81%AE%E5%AD%90">an original character of your own that you can call a child,</a><br />
+if you have a love for that character,
+if you have love,
+then make this game, and pray that that feeling can transmit to someone else out there, out in the world.</p>
+
+<p>If there’s a part of you that screams when you witness an unbelievable combo on <em>Will it Kill?</em>, a part
+of you that could love a kusoge, that can feel the electricity running between the hands on your controller
+and the character on your screen, that wishes to see a game achieve the miracle of existence,
+against all odds…</p>
+
+<p>If you have a love for the game, like I do,<br />
+then let’s make a game.</p>
+
+<p>Let’s make a beautiful game.</p>
+
+<p><br /></p>
+
+<p><br /></p>
+
+<p><br /></p>
+
+<h2 id="awesome-those-words-you-just-wrote-were-truly-gripping-now-onto-the-tutorial">AWESOME, THOSE WORDS YOU JUST WROTE WERE TRULY GRIPPING. NOW ONTO THE TUTORIAL</h2>
+
+<p>Firstly, I must say this.<br />
+I have little to no fighting game player credentials. Frankly, I am quite poor at the games I play.<br />
+Nor do I have much in the way of programming credentials. I still count myself among the beginning ranks of the profession.<br />
+Is this fraudulent? Disappointing? Yes. Perhaps.</p>
+
+<aside>
+* See <a href="https://youtu.be/egcPOGDIk6Y?t=277">"Sajam Discusses Fighting Game Content: We Need More of It"</a>.
+<br />
+<br />
+** These tend to emerge naturally as a pastime of debate between those experts. Tis the intellectual
+pleasure of showing off one's expertise to the world, married with the urge to correct some other moron
+(smooches. Smooches. We're all friends. All in good fun) who hath made an error, or even just an omission
+of technical detail, that wills these threads into existence.
+<br />
+<br />
+<i>"As the strongman exults in his physical
+ability[...], so glories the analyst in that moral activity which disentangles. He derives pleasure from
+even the most trivial occupations bringing his talents into play." </i>
+ - Edgar Allen Poe, <i>The Murders in the Rue Morgue</i>.
+<br />
+<br />
+"Infodumping is pretty fun." I only know this
+quotation because it was used in <i>Forbidden Scrollery</i> chapter 40. This is my infodump flex.
+<br />
+<br />
+...I'll shelve this particular aside now.
+</aside>
+
+<p>But I think many subjects suffer from a lack of mid-level educational content.*
+While there’s tons of tutorials for newcomers, and maybe even a handful of high-level, highly-specific
+technical discussions by subject matter experts**,
+a journeyperson who’s broken out of the beginner-level “tutorial zone” may find themselves frustrated
+by a lack of obvious, discoverable resources suitable for their level.</p>
+
+<p>How do they learn?<br />
+How do they learn how to learn?</p>
+
+<p>I’ve found this to be true of both programming and fighting games, at least for myself. That’s why
+I’m starting this series. Though I have no accomplishments nor expertise to my name, the act of putting
+this resource together might still prove useful to someone, if only myself; and if it fails, stalls, or
+falls short, then, well, probably nobody will see this, so it shall be no sweat off my brow anyway.
+Even then, I might learn something in doing so.</p>
+
+<p><br /></p>
+
+<p>Let’s begin by answering some preliminary questions.</p>
+
+<p><em>Sorry, no, this isn’t the tutorial either.</em></p>
+
+<h2 id="yeah-that-makes-sense">YEAH, THAT MAKES SENSE</h2>
+
+<h3 id="why-a-2d-fighter">Why a 2D fighter?</h3>
+
+<p>This is because <em>Guilty Gear XX Accent Core +R</em> is my current favourite fighting game, and also because
+2D fighters are the ones I have the most knowledge of. In comparison, I know much less about 3D and
+platform fighters; at best, I might be able to write the occasional addendum or errata where one of my
+2D-centric comments does not hold in 3D or platform fighters. I also have a terrible gap in knowledge
+about tag fighters. But we’ll get there when we get there.</p>
+
+<p>I will do my best to write a few comments on the differences between the various subcategories of
+fighting games, but in the end it will fall to you to fill in the gaps. I hope that the rigors of 2D
+that I provide will be enough to tee you up for whatever task you choose for yourself.</p>
+
+<h3 id="why-pygame">Why PyGame?</h3>
+
+<p>It is not necessary to learn how to program at the low level of any programming language in order to
+create a fighting game; many excellent and free game engines, libraries, and frameworks are available
+out there with a wealth of tutorialiterature to learn from, although I cannot guarantee that they will
+have up-to-date tutorials specific to fighting games, and it feels a little disingenuous to ask you to
+learn <strong>All of (eg.) Unity</strong> through overly-general tutorials just to learn how to make your fighting game.</p>
+
+<ul>
+  <li><em>Unity</em> has a reputation for being the big, classic indie game engine, and the
+<a href="http://www.ufe3d.com/doku.php">Universal Fighting Engine</a> toolkit, used in titles like <em>Fight of Animals</em>,
+is an adept tool to create a fighting game. However, it comes with the caveat that UFE is not free.
+In addition, I am obliged to report that <em>Unity</em> (the company) has taken a questionable direction in recent years
+<a href="https://www.fool.com/investing/2022/07/24/most-troubling-thing-about-unitys-ironsource-deal/">(1)</a>
+<a href="https://www.vice.com/en/article/y3d4jy/unity-workers-question-company-ethics-as-it-expands-from-video-games-to-war">(2)</a>,
+so you may wish to look for alternatives going into the future.</li>
+</ul>
+
+<p><img src="/assets/images/article0/amongus-arena.png" alt="Among Us Arena at Vancouver Street Battle screenshot" /></p>
+
+<p>Fight of Animals <em>and</em> Fight of Machines <em>were made with Unity + UFE;</em>
+Among Us Arena Ultimate <em>was made in Unity directly.</em></p>
+
+<ul>
+  <li><em>Godot Engine</em> is one such alternative, offering similar power to Unity while sticking to communal
+open-source roots. It lends itself well to 3D assets in ways that other tools might not. Working in this
+engine might be a good experience for making other kinds of games, too.</li>
+</ul>
+
+<p><img src="/assets/images/article0/yomi-hustle.png" alt="Your Only Move is Hustle screenshot" /></p>
+
+<p><em>Although not a traditional fighting game title, <strike>Yomi</strike></em>
+<strong>Y</strong>our <strong>O</strong>nly <strong>M</strong>ove <strong>I</strong>s Hustle <em>was made in Godot.</em></p>
+
+<aside>
+If you'd like to weigh the quality of the MUGEN tool yourself, a spreadsheet of MUGEN games maintained by
+Tumblr user <a href="https://mugenfinder.tumblr.com/">mugenfinder</a> can be found
+<a href="https://docs.google.com/spreadsheets/d/1FMHlikel6MjlbojchEdS82VsE-ScQVhpkz9cVU_UL8M/edit#gid=0">here</a>.
+
+<br />
+<br />
+
+- As told to me by mugenfinder, you can't sell games made with MUGEN for profit, but you can with IKEMEN GO.
+
+</aside>
+
+<ul>
+  <li><em>MUGEN</em>, the classic fighting game character kitchen sink, also offers immediate structure for those who
+just want to slap their characters into a working thing immediately. I’m told it has a vibrant community
+of <em>MUGEN</em> enthusiasts and SaltyBettors backing it up, but I have not investigated the quality of the
+program(s), the ease of use, or the tutorial support for making changes. Certainly I myself feel a stigma
+that “proper” fighting games don’t come from <em>MUGEN</em>, but I don’t know enough about it to say that for
+certain.</li>
+</ul>
+
+<p><img src="/assets/images/article0/battle-craze.png" alt="Battle Craze screenshot" /></p>
+
+<p><a href="https://www.youtube.com/watch?v=SpAg5rcEVh4">Sarvets All-Stars</a>, <em>one of the auction tournament games of
+Combo Breaker 2018, was made using MUGEN, and</em> <a href="https://www.playbattlecraze.com/">Battle Craze</a>, <em>as seen
+on <a href="https://www.youtube.com/watch?v=iXd-HmrcbZc">Will it Kill Episode 17</a>, uses SUEHIRO’s I.K.E.M.E.N GO engine.</em></p>
+
+<p>Then, why use a programming library like Pygame? I will not sugarcoat it for you - it’s no small deal of grief to
+work with code directly. “True” originality is overrated, and though it may be satisfying to your ego,
+as a developer and a programmer, you ought to avoid reinventing the wheel when possible.</p>
+
+<p>However, even so, there is something to be said about the satisfaction that comes from building something
+from the ground up, the degree of control and understanding afforded to the programmer who starts from scratch.
+I think there’s a lot that we can learn in doing so, even if it may be faster and/or easier to start
+with a more approachable offering.</p>
+
+<aside>
+* This is a subjective opinion. But I believe it fully.
+
+<br />
+<br />
+** If you don't know what Delphi is, don't worry:
+ neither do I. This probably says more about my lack of dev knowledge than it does about its popularity
+as a programming language. But the point is that against all odds, video games get made, and against
+even further odds, people don't even do it with the tools you'd expect them to. Occasionally you hear
+about a cartel of extremely gifted wizards simulating a fully-featured copy of <i>Dwarf Fortress</i>
+in <i>Minecraft</i>, or a miniature black hole. Or something. This world is full of miracles.
+
+</aside>
+
+<p>As for the choice of Python and Pygame – let it be said that if there is a will, there is a way to make
+a game with any tool given to you. For example, the cult classic shmup <em>Hellsinker.</em>, one of the greatest
+solo indie games of all time*,
+<a href="https://web.archive.org/web/20180819171301/http://mauve.mizuumi.net/2012/06/01/retrospective-hellsinker-translation-development#more-441">was written in Delphi</a>**.
+<a href="https://www.derekyu.com/makegames/deathloops.html">Just finishing a game, any game at all</a>,
+setting aside the merits and difficulties of whichever particular medium you choose, is an achievement
+that deserves celebration.</p>
+
+<p>But the last thing I will ask you to do is write a video game in (eg.) C, because</p>
+
+<ol>
+  <li>that is an unkind thing to ask someone to do,</li>
+  <li>I also would have to write a video game in (eg.) C, and I don’t want to.</li>
+</ol>
+
+<p>You can use any tool you like, but you probably shouldn’t choose something that only adds pain.</p>
+
+<p>There might be some things you truly can’t do anything about, but unrelated,
+unfair pain points can and will wear down your willingness to work on your project, and
+<strong>you absolutely must guard your motivation with your life.</strong>
+If you run out of motivation, there is a very real risk that your project will remain unfinished forever.</p>
+
+<p>Don’t agonize over the decision forever, but if you take a bit of time to pick your tools with some thought,
+you can save a lot of pain.
+And when you do come across pain points, take a bit of time to stop and identify them, and
+perhaps invest a bit of time into reducing the pain to the best of your ability.</p>
+
+<p>Now, I consider Python to be a good starter language for a host of reasons:</p>
+
+<ul>
+  <li>You don’t have to write a small suite of esoteric-looking boilerplate code to print “Hello World”.</li>
+  <li>You don’t have to complete a small ritual to compile and build it.</li>
+  <li>Lists and dictionaries are within arms’ reach.</li>
+  <li>You don’t have to learn how to manage memory immediately. You don’t need to know what a pointer is.</li>
+  <li>It has a host of excellent learning resources, like
+<a href="https://automatetheboringstuff.com/#toc">Automate the Boring Stuff</a>.</li>
+  <li>If you don’t finish your project, you can jump ship and use your newfound Python knowledge to
+write programs for machine learning or statistical analysis. Probably.</li>
+  <li>It’s the language I started with, thus making it the best.</li>
+</ul>
+
+<aside>
+It would have been <i>so sick</i> if I recommended LOVE2D right after talking about love
+for ten paragraphs, but I'm not quite comfortable enough with Lua to use it myself.
+</aside>
+
+<p>There are surely a feast of wonderful languages that fulfill these criteria –
+like Lua, for example, which offers the excellent <a href="https://love2d.org/">LOVE2D library</a>
+used in the top-notch shmup <a href="http://bluerevolvergame.com/">BLUE REVOLVER</a> (among others).
+I’ve chosen Python and Pygame for its comfort factor, and in truth, this is the most important factor.</p>
+
+<aside>
+However, sometimes being stubborn really only just results in unnecessary pain that brings you closer
+to the point of giving up or losing motivation. Thus there are also times where you must recognize
+that you should bend the knee and do things the easy way, perhaps just temporarily, perhaps for the
+rest of the way. You must learn these limits for yourself.
+</aside>
+
+<p>Overcoming the learning curve of other, perhaps clunkier languages can definitely be done with a
+little bit of stick-with-it stubbornness; if this is what you choose, you should still be able to
+get something out of the problem statement and logic portions of each update, with just a little bit
+of extra elbow grease to adapt the Pygame code to your language. But you can do it.
+I have a baseless faith in your ability. Nevertheless, I encourage you.</p>
+
+<p><br />
+<br />
+<br /></p>
+
+<p><em>Please feel free to write in with YOUR factual opinion about what the BEST first programming language
+for new devs is. Or make a YouTube video with a loud thumbnail on it and reap those 15 cents of
+AdSense revenue. Either/or.</em></p>
+
+<p>* <em>A technical article addressing PyGame and its reputation for being a slow library can be found
+<a href="https://blubberquark.tumblr.com/post/630054903238262784/why-pygame-is-slow">here</a>.</em></p>
+
+<h3 id="can-i-steal-this-code">Can I steal this code?</h3>
+
+<p>You are free to use the code in this tutorial however you like. (That’s the MIT License included in this
+site’s repository.) An acknowledgement of credit would be a
+nice gesture, but I can’t really stop you if you don’t add one, and in the end it’s not a big deal.
+But if these articles were useful to you, then I would love to hear about it. Write in! …Somewhere!
+I’ll have to figure out an inbox or a comments section for this at some point.</p>
+
+<p>If you steal and claim credit for writing this tutorial I’ll be pretty miffed at you.
+I’m not going to send you death threats or hire a dark web hitman or whatever, but like, come on. Let me have this.</p>
+
+<h3 id="why-didnt-you-do-it-like-this">Why did(n’t) you do it like this?</h3>
+
+<p>If something isn’t clear to you, leave a comment and I’ll do my best to answer. I’ve added this
+grossly Wikia-looking Disqus integration to this end. I apologize for this affront to your sensibilities.</p>
+
+<p>If you know a better way to do things, feel free to let me know as well. I am not an expert programmer, and
+there’s many things I don’t know. If the suggestion is good, I’m happy to update the relevant posts
+with better code or better information.</p>
+
+<p><a href="/fgtutorial/2023/01/09/article0-5-preparations.html">» Next: #0.5: Preparations</a></p>
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = "https://tuningdipsw.github.io/fgtutorial/2023/01/06/article0-heart.html";
+	this.page.identifier = "/fgtutorial/2023/01/06/article0-heart.html";
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://tuning-2.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  </body>
+</html>

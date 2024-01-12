@@ -1,0 +1,321 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Let's make a fighting game #1.1: Game loop tangents</title>
+	<link rel="stylesheet" href="/assets/css/styles.css">
+	<link type="application/atom+xml" rel="alternate" href="https://tuningdipsw.github.io/pages/tuningdipsw/feed.xml" title="Home of one of the Hellsinker. players of all time" />
+	<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Let’s make a fighting game #1.1: Game loop tangents | Home of one of the Hellsinker. players of all time</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Let’s make a fighting game #1.1: Game loop tangents" />
+<meta name="author" content="minogame" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="« Prev: #1: Introducing our game loop This is a bit of a side article to article #1 (Introducing our game loop), filled with bits I thought were ultimately unnecessary to the main tutorial and ended up cutting during my editing pass. Here are some fun bits of writing and hopefully informative I couldn’t quite bring myself to cut completely. If you’re stuck in a tutorial-reading haze, I would really recommend just skipping to #2 instead of reading through this, but if you’d just like to read a little more, I’ve left this here for you." />
+<meta property="og:description" content="« Prev: #1: Introducing our game loop This is a bit of a side article to article #1 (Introducing our game loop), filled with bits I thought were ultimately unnecessary to the main tutorial and ended up cutting during my editing pass. Here are some fun bits of writing and hopefully informative I couldn’t quite bring myself to cut completely. If you’re stuck in a tutorial-reading haze, I would really recommend just skipping to #2 instead of reading through this, but if you’d just like to read a little more, I’ve left this here for you." />
+<link rel="canonical" href="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html" />
+<meta property="og:url" content="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html" />
+<meta property="og:site_name" content="Home of one of the Hellsinker. players of all time" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-01-31T12:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Let’s make a fighting game #1.1: Game loop tangents" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"minogame"},"dateModified":"2023-01-31T12:00:00+00:00","datePublished":"2023-01-31T12:00:00+00:00","description":"« Prev: #1: Introducing our game loop This is a bit of a side article to article #1 (Introducing our game loop), filled with bits I thought were ultimately unnecessary to the main tutorial and ended up cutting during my editing pass. Here are some fun bits of writing and hopefully informative I couldn’t quite bring myself to cut completely. If you’re stuck in a tutorial-reading haze, I would really recommend just skipping to #2 instead of reading through this, but if you’d just like to read a little more, I’ve left this here for you.","headline":"Let’s make a fighting game #1.1: Game loop tangents","mainEntityOfPage":{"@type":"WebPage","@id":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html"},"url":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+	<div class="page sidebar">
+    <nav class="top">
+<table>
+<tr>
+  
+  <td>
+    <a href="/" >
+      Home
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/about/" >
+      About
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/table-of-contents.html" >
+      Contents
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/staff.html" >
+      Author
+    </a>
+  <td class="gap">
+  
+</tr>
+</table
+</nav>
+
+    <h1 class="pagetitle">TUNINGDIPSW</h1>
+	<h4>Instructional website for a fighting game developer</h4>
+	<h2> Let's make a fighting game #1.1: Game loop tangents </h2>
+	<div class="content">
+    <p>
+  31 Jan 2023
+  
+  
+    - <a href="/authors/tuningdipsw.html">TUNING DIPSW (Andrew Hsu)</a>
+  
+</p>
+
+<div id="table-of-contents">
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#game-loop-readings">Game loop readings</a></li>
+<li class="toc-entry toc-h2"><a href="#some-definitions">Some definitions</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#fps-and-frames-are-overloaded-terms">(“FPS” and “Frames” are overloaded terms)</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#can-we-make-it-better">…Can we make it better?</a></li>
+<li class="toc-entry toc-h2"><a href="#other-questions">Other questions</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#vsync">…VSync?</a></li>
+<li class="toc-entry toc-h3"><a href="#could-we-use-multi-threading-to-decouple-processinput-update-and-render-instead">Could we use multi-threading to decouple processInput(), update(), and render() instead?</a></li>
+<li class="toc-entry toc-h3"><a href="#bonus-reading">Bonus reading</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#go-to-the-next-article">Go to the next article</a></li>
+</ul> 
+</div>
+
+<p><a href="/fgtutorial/2023/01/30/article1-gameloop.html">« Prev: #1: Introducing our game loop</a></p>
+
+<p>This is a bit of a side article to article #1 (Introducing our game loop), filled with bits
+I thought were ultimately unnecessary to the main tutorial and ended up cutting
+during my editing pass.</p>
+
+<p>Here are some fun bits of writing and hopefully informative I couldn’t quite bring myself to cut completely.
+If you’re stuck in a tutorial-reading haze, I would really recommend just skipping to #2
+instead of reading through this, but if you’d just like to read a little more,
+I’ve left this here for you.</p>
+
+<!--more-->
+
+<h2 id="game-loop-readings">Game loop readings</h2>
+
+<p>The best literature on what the game loop pattern looks like, and how to do it well,
+comes from two main articles:</p>
+
+<ol>
+  <li>Robert Nystrom’s <a href="https://gameprogrammingpatterns.com/game-loop.html"><em>Game Programming Patterns</em>.</a></li>
+  <li>Glenn Fiedler’s <a href="https://gafferongames.com/post/fix_your_timestep/"><em>Gaffer On Games: Fix Your Timestep!</em></a></li>
+</ol>
+
+<p>(2) might be a little tricky to understand if you don’t have existing code
+in front of you, but I think reading through (1) first will help you grasp the big ideas.</p>
+
+<p>Neither of these pages are particularly long, so I encourage you to give them a read, but
+if you just want to crunch through the tutorials here, I’m hardly going to force you to do a reading assignment.</p>
+
+<h2 id="some-definitions">Some definitions</h2>
+
+<h3 id="fps-and-frames-are-overloaded-terms">(“FPS” and “Frames” are overloaded terms)</h3>
+
+<aside>
+<a href="https://wiki.gbl.gg/w/Dong_Dong_Never_Die/FAQ#.22The_frame_data_seems_off.2C_usually_I_can_react_to_a_25f_startup_move.22">
+Dong Dong Never Die's 100 FPS</a> is a unique exception to this in fighting games.
+The 60FPS standard has been ingrained in fighting games for a long time, so I don't recommend switching.
+<br />
+<br />
+Another fun example of a non-60FPS game is
+<a href="https://shmups.wiki/library/Cho_Ren_Sha_68K">ChoRenSha68k</a>, a shmup programmed on 55FPS hardware;
+when played on Windows PC instead of its native X68000, the player must handle ChoRenSha's challenges in
+ever so slightly less time than they were designed to be handled in. Still doable, but just a little bit
+more saucy.
+<br />
+<br />
+<a href="https://www.youtube.com/watch?v=_w8SBUWuzek&amp;list=PL6PHQCxAqpJTA3R5hgkqVJChfIuecx2gh">
+Has an excellent FM chiptune soundtrack as well.</a>
+Reading the <a href="https://shmuplations.com/chorensha68k/">developer's interview</a> about this game really impressed me
+with what they were able to accomplish at the time.
+</aside>
+
+<p>60FPS is a common performance minimum for most games.
+We don’t expect to run into a major performance bottleneck with our relatively simple 2D graphics,
+but if our game were to utilize systems like complex 3D models and lighting engines, we might have to start worrying about this.</p>
+
+<p>PC gaming enthusiasts have the privilege
+of enjoying games at high frame rates (often 120FPS, possibly higher);
+although even most modern fighting games these days cap their frame rate at 60FPS,
+we could theoretically allow our game to run above 60FPS visually, for the benefit of
+some theoretical buttery-smooth graphical effects.</p>
+
+<p>(We’re going to be making a sprite-based 2D fighter, where we have to supply each frame of the animation by hand,
+so we don’t really have any buttery-smooth graphical effects to speak of. But it’s an idea.)</p>
+
+<p>(If hand-drawing or hand-supplying the sprites for each frame of animation sounds like a lot of work – it is!<br />
+That’s one of the main reasons why you might choose to work with 3D models instead.<br />
+I’m not so familiar with how to create, animate, and render 3D objects,
+and I admit I have a fondness for hand-drawn animation, so I’ll be going with the 2D sprite-based route.)</p>
+
+<p>(…We’ll have to skimp out on going all out drawing these animations in this tutorial,
+just so we can finish our code before 3023.)</p>
+
+<p>If we did so, we’d need to ensure that the actual logical frames of our fighting game,
+the frames that dictate how long our characters’ actions take, remain at the fighting game standard of 60FPS,
+in order to maintain the convention that players understand and expect.</p>
+
+<p>It might be nice to decouple the timing of frame-rendering from our input processing and our game state updating.</p>
+
+<ul>
+  <li>If our game performance suddenly tanks to 15FPS because our antivirus just launched a scheduled scan
+and our computer suddenly doesn’t have the resources to lovingly render the sebum glands of (eg.) Mario’s nose,
+it kind of sucks to see our gameplay (eg. the timing we press buttons to in our combo) slow down to quarter speed.</li>
+  <li>If we want to implement something like <a href="https://youtu.be/F6Fx0T_3IWY?t=704">Tekken 7’s cinematic slowdown</a>,
+we want the speed at which the characters take action to slow down without affecting the visual frame rate.<br />
+We probably wouldn’t want to change the speed at which input parsing is handled during these situations.</li>
+  <li>The time at which the game moves might even stop completely.
+There are situations like <a href="https://glossary.infil.net/?t=Super%20Flash">superflashes</a>
+and most games’ round starts where the game state is paused, but inputs can continue to be entered in order to buffer moves.</li>
+</ul>
+
+<p>This separation between the game-<em>performance</em> frames that our graphics live in, the game-<em>logic</em> frames that
+the game state lives in, and the <em>real-time</em> 1/60ths of a second our inputs live in is worth mulling over in your head.</p>
+
+<p>To restate this, the following three definitions of “frames”/”FPS” are different:</p>
+
+<ul>
+  <li><strong>The number of “frames” (pictures drawn to screen) shown per second, the <em>visual performance frames</em>.</strong></li>
+</ul>
+
+<p>Normally 60FPS, but it’d be nice if it could be uncapped higher for visual smoothness,
+or if performance drops during rendering didn’t affect the gameplay.</p>
+
+<ul>
+  <li><strong>The number of “frames” (smallest unit of in-game time) per second, within which the game state can change.</strong></li>
+</ul>
+
+<p>Constant 60FPS, by convention.<br />
+However, the rate at which game state advances may slow down or be frozen during certain game mechanics.<br />
+It might also be forced to slow down in online situations where the connection between two players is inconsistent.<br />
+(If your game stops receiving the opponent’s inputs, the game state shouldn’t advance.)</p>
+
+<ul>
+  <li><strong>The rate at which player inputs are processed by the game.</strong></li>
+</ul>
+
+<p>You could make this arbitrarily fast instead of 60FPS,
+but 60FPS is more than enough fidelity to parse human input,
+and making this different from the rate of game state change might introduce some easy-to-mess-up logic to the input parser.</p>
+
+<hr />
+
+<p>Yes, these three definitions line up nicely with the <code class="language-plaintext highlighter-rouge">processInput()</code>, <code class="language-plaintext highlighter-rouge">update()</code>, and <code class="language-plaintext highlighter-rouge">render()</code>
+functions of our game loop, just in reverse order.</p>
+
+<p>As it stands, our current naive implementation of the timing clock at the base of the Game Loop ties these three together.
+That doesn’t seem ideal.
+Although it’s probably not the end of the world if they’re not all completely decoupled…</p>
+
+<h2 id="can-we-make-it-better">…Can we make it better?</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp"># https://gameprogrammingpatterns.com/game-loop.html#play-catch-up
+</span><span class="kt">double</span> <span class="n">previous</span> <span class="o">=</span> <span class="n">getCurrentTime</span><span class="p">();</span>
+<span class="kt">double</span> <span class="n">lag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">double</span> <span class="n">current</span> <span class="o">=</span> <span class="n">getCurrentTime</span><span class="p">();</span>
+  <span class="kt">double</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">current</span> <span class="o">-</span> <span class="n">previous</span><span class="p">;</span>
+  <span class="n">previous</span> <span class="o">=</span> <span class="n">current</span><span class="p">;</span>
+  <span class="n">lag</span> <span class="o">+=</span> <span class="n">elapsed</span><span class="p">;</span>
+
+  <span class="n">processInput</span><span class="p">();</span>
+
+  <span class="c1">// Isn't this a little bit familiar?</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">lag</span> <span class="o">&gt;=</span> <span class="n">MS_PER_UPDATE</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">update</span><span class="p">();</span>
+    <span class="n">lag</span> <span class="o">-=</span> <span class="n">MS_PER_UPDATE</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">render</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Let’s look over this C code from article (1) for a game loop with fixed update time step and
+variable rendering for a moment.</p>
+
+<p>Our game state is behind 1 or more fixed time steps (frames) where it needs to be,
+so we advance it one MS_PER_UPDATE (frame) at a time until we’re up to date.
+Finally, now that we’re in the frame we need to be in, we can render it.</p>
+
+<p>Hm. That sounds familiar.</p>
+
+<p>It sounds a little like the catch-up we do when we rollback our game state.</p>
+
+<p>Like we mentioned in article #1, we’re not going to worry about integrating this special
+fixed-timestep update loop into our code quite yet. I know I have a tendency to get lost in
+overthinking too much before I even start to code, so for now, we’ll start with
+the naive game loop in article #2.</p>
+
+<p>But it’s a nice idea to keep in mind.</p>
+
+<h2 id="other-questions">Other questions</h2>
+
+<h3 id="vsync">…VSync?</h3>
+
+<p>My understanding of how VSync plays into our FPS theory isn’t too good, but I should point out that
+the community recommended PC settings for minimal input delay in
+<a href="https://twitter.com/Super_Myoro/status/1468005468349943809"><em>BBCF</em></a> and
+<a href="https://twitter.com/Hursh191/status/1574203001681588224"><em>Xrd</em></a> both have VSync off,
+so it shouldn’t be a major deal-breaker if we don’t support it.
+We might add support for it or play around with some forced screen-tearing examples in a bonus chapter later on.</p>
+
+<h3 id="could-we-use-multi-threading-to-decouple-processinput-update-and-render-instead">Could we use multi-threading to decouple processInput(), update(), and render() instead?</h3>
+
+<p>…Maybe?
+That sounds plausible…</p>
+
+<p>I’m not confident enough in my programming ability to try it, though.<br />
+I think it’ll be easier to get this right if we stick to a single-threaded approach for now.</p>
+
+<h3 id="bonus-reading">Bonus reading</h3>
+
+<p>The DemoFighter mentioned in #0.8 borrows a
+<a href="https://github.com/rcmagic/DemoFighterWithNetcode/blob/master/game/RunOverride.lua">modified game loop</a>
+for LOVE2D/LUA with a fixed timestep and the ability to cap “frame skip” to avoid a spiral of death.</p>
+
+<p>Maybe it solves our problems?<br />
+I’d have to play around with it a bit more to understand what exactly the frame skip entails.</p>
+
+<h2 id="go-to-the-next-article">Go to the next article</h2>
+
+<p><a href="/fgtutorial/2023/02/06/article2-inputs.html">» Next: #2: Inputs</a></p>
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = "https://tuningdipsw.github.io/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html";
+	this.page.identifier = "/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html";
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://tuning-2.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  </body>
+</html>

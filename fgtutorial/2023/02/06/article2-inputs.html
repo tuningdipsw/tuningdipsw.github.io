@@ -1,0 +1,747 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Let's make a fighting game #2: Inputs</title>
+	<link rel="stylesheet" href="/assets/css/styles.css">
+	<link type="application/atom+xml" rel="alternate" href="https://tuningdipsw.github.io/pages/tuningdipsw/feed.xml" title="Home of one of the Hellsinker. players of all time" />
+	<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Let’s make a fighting game #2: Inputs | Home of one of the Hellsinker. players of all time</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Let’s make a fighting game #2: Inputs" />
+<meta name="author" content="minogame" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="« Prev: #1: Introducing our game loop « Prev: #1.1: Game loop tangents Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. The first thing we need to create is the input system of our game. Although it is an intriguing idea, we won’t be taking after NetHack or Dwarf Fortress and binding actions to single buttons (no ‘q’ to quaff). We must instead find a way to decide whether a player’s (eg.) “236P” input should trigger a special move or a command normal (6P)." />
+<meta property="og:description" content="« Prev: #1: Introducing our game loop « Prev: #1.1: Game loop tangents Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. The first thing we need to create is the input system of our game. Although it is an intriguing idea, we won’t be taking after NetHack or Dwarf Fortress and binding actions to single buttons (no ‘q’ to quaff). We must instead find a way to decide whether a player’s (eg.) “236P” input should trigger a special move or a command normal (6P)." />
+<link rel="canonical" href="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/02/06/article2-inputs.html" />
+<meta property="og:url" content="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/02/06/article2-inputs.html" />
+<meta property="og:site_name" content="Home of one of the Hellsinker. players of all time" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-02-06T14:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Let’s make a fighting game #2: Inputs" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"minogame"},"dateModified":"2023-02-06T14:00:00+00:00","datePublished":"2023-02-06T14:00:00+00:00","description":"« Prev: #1: Introducing our game loop « Prev: #1.1: Game loop tangents Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. The first thing we need to create is the input system of our game. Although it is an intriguing idea, we won’t be taking after NetHack or Dwarf Fortress and binding actions to single buttons (no ‘q’ to quaff). We must instead find a way to decide whether a player’s (eg.) “236P” input should trigger a special move or a command normal (6P).","headline":"Let’s make a fighting game #2: Inputs","mainEntityOfPage":{"@type":"WebPage","@id":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/02/06/article2-inputs.html"},"url":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/02/06/article2-inputs.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+	<div class="page sidebar">
+    <nav class="top">
+<table>
+<tr>
+  
+  <td>
+    <a href="/" >
+      Home
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/about/" >
+      About
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/table-of-contents.html" >
+      Contents
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/staff.html" >
+      Author
+    </a>
+  <td class="gap">
+  
+</tr>
+</table
+</nav>
+
+    <h1 class="pagetitle">TUNINGDIPSW</h1>
+	<h4>Instructional website for a fighting game developer</h4>
+	<h2> Let's make a fighting game #2: Inputs </h2>
+	<div class="content">
+    <p>
+  06 Feb 2023
+  
+  
+    - <a href="/authors/tuningdipsw.html">TUNING DIPSW (Andrew Hsu)</a>
+  
+</p>
+
+<div id="table-of-contents">
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#eventual-goals">Eventual goals</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#display-inputs-on-screen">Display inputs on screen.</a></li>
+<li class="toc-entry toc-h3"><a href="#avoid-hardcoding-keybinds-into-our-business-logic">Avoid hardcoding keybinds into our business logic.</a></li>
+<li class="toc-entry toc-h3"><a href="#contextually-parse-inputs-into-actions">Contextually parse inputs into actions.</a></li>
+<li class="toc-entry toc-h3"><a href="#accept-buffered-inputs">Accept buffered inputs.</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#starting-with-the-basic-game-loop">Starting with the basic game loop</a></li>
+<li class="toc-entry toc-h2"><a href="#establishing-some-terminology">Establishing some terminology</a></li>
+<li class="toc-entry toc-h2"><a href="#should-we-get-input-from-pygamekeyget_pressed-or-the-event-queue">Should we get input from pygame.key.get_pressed() or the event queue?</a></li>
+<li class="toc-entry toc-h2"><a href="#defining-the-keybinds">Defining the keybinds</a></li>
+<li class="toc-entry toc-h2"><a href="#stopping-point">Stopping point</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#bonus-setting-up-some-unit-tests">Bonus: Setting up some unit tests</a></li>
+<li class="toc-entry toc-h3"><a href="#article-meta">Article meta</a></li>
+</ul>
+</li>
+</ul> 
+</div>
+
+<p><a href="/fgtutorial/2023/01/30/article1-gameloop.html">« Prev: #1: Introducing our game loop</a></p>
+
+<p><a href="/fgtutorial/2023/01/31/article1-1-gameloop-tangents.html">« Prev: #1.1: Game loop tangents</a></p>
+
+<p>Good day. In this series of articles, I’ll be attempting to program a simple 2D
+fighting game using the Python game development library Pygame.</p>
+
+<p>The first thing we need to create is the input system of our game.
+Although it is an intriguing idea, we won’t be taking after <em>NetHack</em> or <em>Dwarf Fortress</em>
+and binding actions to single buttons (no ‘q’ to quaff). We must
+instead find a way to decide whether a player’s (eg.) “236P” input should trigger a
+special move or a command normal (6P).</p>
+
+<!--more-->
+
+<blockquote>
+  <p>Numpad notation will be used in these articles. See
+<a href="https://www.dustloop.com/w/Notation">Dustloop</a> for a refresher on how to read
+numpad notation.</p>
+</blockquote>
+
+<h2 id="eventual-goals">Eventual goals</h2>
+
+<h3 id="display-inputs-on-screen"><strong>Display inputs on screen.</strong></h3>
+
+<p>It may help us to reference how other games show their inputs.</p>
+
+<p><img src="/assets/images/article2/xrd-input-display.png" alt="XRD's training mode" />
+Guilty Gear XRD<em>’s input display system. (source: own screenshot)</em></p>
+
+<p>The slightly darker colour of some direction/button inputs indicate that the
+direction/button is still being held down from the previous input state.</p>
+
+<p>The actions that these inputs evaluated to can also be displayed,
+although the buttons are ordered chronologically bottom to top,
+while the actions are top to bottom.</p>
+
+<p><img src="/assets/images/article2/uni-input-display.png" alt="UNICLR's training mode" />
+Under Night<em>’s input display system.</em> <a href="https://www.youtube.com/watch?v=I42_NwoYdQw"><em>(video source)</em></a></p>
+
+<p>Does not visually distinguish between invalid or buffered inputs and valid inputs.
+However, showing frame counts to indicate how long the player’s inputs remained in each state looks useful.</p>
+
+<h3 id="avoid-hardcoding-keybinds-into-our-business-logic"><strong>Avoid hardcoding keybinds into our business logic.</strong></h3>
+
+<p><img src="/assets/images/article2/plus-r-key-mapping-gui.png" alt="+R's key mapping menu" />
+Guilty Gear XXAC+R<em>’s key mapping menu. For some reason, +R has a keyboard menu that maps to controller keys,</em>
+<em>and then a controller menu that maps those controller keys to game buttons, which is a little confusing.</em></p>
+
+<p>We will need to support a number of input devices and customizable controls for our fighting game,
+so we must avoid hardcoding specific keys into our business logic.</p>
+
+<p>A GUI for setting these keys in-game is a must, but we’ll put it off for now.</p>
+
+<h3 id="contextually-parse-inputs-into-actions"><strong>Contextually parse inputs into actions.</strong></h3>
+
+<p>Special inputs are a famous fixture of the fighting game genre, ranging from the simple quarter-circle forward (236) motion
+to the infamous <a href="https://glossary.infil.net/?t=Pretzel%20Motion">pretzel motion</a> (1632413).</p>
+
+<aside>
+There exist arguments both for and against them as a barrier to entry.
+<a href="https://www.youtube.com/watch?v=1qEguZXyWjw">(1) </a>
+<a href="https://www.youtube.com/watch?v=xBKnlyMpp1s">(2) </a>
+<br />
+<br />
+Some games such as GBVS and Fantasy Strike have also experimented with easier 1-button specials.
+We'll be using the most traditional type of special inputs in this game, but I invite you to experiment with this idea.
+</aside>
+
+<p>The fighting game inputs are highly contextual even among video games;
+for many moves, the game has to consider our previous inputs as well as our current ones
+in order to determine whether (eg.) 6P should lead to the command normal 6P, or the special move 236P.</p>
+
+<p>The exact logic of how to parse an input into one of multiple specific game actions, especially when the player has pressed
+more buttons than necessary, as in the case of many <a href="https://glossary.infil.net/?t=Option%20Select">Option Selects</a>,
+can become extremely complex.</p>
+
+<p>Dustloop’s <em>BlazBlue</em> page contains a reference of <a href="https://www.dustloop.com/w/BBCF/Miscellaneous#Input_Priority">input priority</a> that
+shows just how complex this system might become.
+For special moves, we’ll lean on <a href="https://hisouten.koumakan.jp/wiki/Controls#Skills"><em>Soku</em>’s simpler hierarchy</a> for now,
+since <em>BlazBlue</em>’s hierarchy varies between characters.</p>
+
+<p>For the time being, we’ll keep the inputs we accept fairly simple. We can reference the section on <em>BlazBlue</em>’s
+<a href="https://www.dustloop.com/w/BBCF/Miscellaneous#Input_Requirements">“Input Requirements”</a> for some sensible specs on how to parse
+a special input.</p>
+
+<h3 id="accept-buffered-inputs"><strong>Accept buffered inputs.</strong></h3>
+
+<p>An extension of the input system that allows more leniency during combos and defense.
+The leniency of the buffer system varies between games, ranging from generous to
+<a href="https://twitter.com/TheFuntax/status/1321983553966669824">nearly non-existent</a>,
+giving a slightly different feel to each game.</p>
+
+<p>See <a href="https://glossary.infil.net/?t=Buffer%20Window">“Buffer Window”</a> on the Fighting Game Glossary.</p>
+
+<p>Some inputs don’t cause an action (immediately), due to the character
+being committed to some other action, or possibly the requested action being invalid during
+the current state.</p>
+
+<p>If done close enough to the earliest valid frame that the action could take place,
+a valid input may be “buffered” by the game to trigger the requested action on that earliest frame.</p>
+
+<p>However, if the input is performed too many frames before that earliest valid frame, or “outside of the buffer window”,
+it is considered invalid and the game will not translate it into an action.</p>
+
+<h2 id="starting-with-the-basic-game-loop">Starting with the basic game loop</h2>
+
+<p>I’ve borrowed a version of the game loop with a FPS counter from
+<a href="https://coderslegacy.com/python/display-fps-pygame/">this tutorial</a>.
+I’ve taken the liberty of separating some global constants and the FPS counter
+class into separate files:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># constants.py
+</span><span class="n">WINDOW_WIDTH</span> <span class="o">=</span> <span class="mi">640</span>
+<span class="n">WINDOW_HEIGHT</span> <span class="o">=</span> <span class="mi">480</span>
+<span class="n">FRAME_RATE_CAP</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="n">WHITE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+<span class="n">BLACK</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># fps_counter.py
+</span><span class="kn">import</span> <span class="nn">pygame</span> <span class="k">as</span> <span class="n">pg</span>
+<span class="kn">import</span> <span class="nn">constants</span>
+
+<span class="k">class</span> <span class="nc">FpsCounter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pg</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">Clock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">pg</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">SysFont</span><span class="p">(</span><span class="s">"Verdana"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">clock</span><span class="p">.</span><span class="n">get_fps</span><span class="p">()),</span> <span class="bp">True</span><span class="p">,</span> <span class="n">constants</span><span class="p">.</span><span class="n">WHITE</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="p">):</span>
+        <span class="n">fps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">clock</span><span class="p">.</span><span class="n">get_fps</span><span class="p">())</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">fps</span><span class="si">}</span><span class="s">FPS"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">constants</span><span class="p">.</span><span class="n">WHITE</span><span class="p">)</span>
+        <span class="n">display</span><span class="p">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="n">constants</span><span class="p">.</span><span class="n">WINDOW_WIDTH</span> <span class="o">-</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># main.py
+</span><span class="kn">import</span> <span class="nn">pygame</span> <span class="k">as</span> <span class="n">pg</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">fps_counter</span> <span class="k">as</span> <span class="n">fps</span>
+<span class="kn">import</span> <span class="nn">constants</span>
+
+<span class="n">pg</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">pg</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">set_mode</span><span class="p">((</span><span class="n">constants</span><span class="p">.</span><span class="n">WINDOW_WIDTH</span><span class="p">,</span> <span class="n">constants</span><span class="p">.</span><span class="n">WINDOW_HEIGHT</span><span class="p">))</span>
+<span class="n">fpsCounter</span> <span class="o">=</span> <span class="n">fps</span><span class="p">.</span><span class="n">FpsCounter</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">processInput</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">update</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">render</span><span class="p">():</span>
+    <span class="n">window</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">constants</span><span class="p">.</span><span class="n">BLACK</span><span class="p">)</span>
+    <span class="n">fps_counter</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+    
+    <span class="n">pg</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">update</span><span class="p">()</span>
+
+<span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+    <span class="n">processInput</span><span class="p">()</span>
+    <span class="n">update</span><span class="p">()</span>
+    <span class="n">render</span><span class="p">()</span>
+    <span class="n">fpsCounter</span><span class="p">.</span><span class="n">clock</span><span class="p">.</span><span class="n">tick</span><span class="p">(</span><span class="n">constants</span><span class="p">.</span><span class="n">FRAME_RATE_CAP</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Running this game only displays a black screen with an FPS counter,
+but this is a nice skeleton of a program for us to springboard off of.</p>
+
+<h2 id="establishing-some-terminology">Establishing some terminology</h2>
+
+<aside>
+Not an official terminology, I'm inventing it on the spot right now.
+</aside>
+
+<p>Our ultimate goal with the input system is to translate <em>keys</em> to <em>buttons</em> to <em>inputs</em> to <em>actions</em>:</p>
+
+<p><strong>Keys</strong><br />
+The raw inputs of an input device such as a keyboard, joystick, or controller.<br />
+We’ll start with keyboard support only for simplicity.</p>
+
+<aside>
+Note: Don't get confused by the other macros,
+a dash macro button should be handled as an unique button than a combination of multiple buttons.
+</aside>
+
+<p><strong>Buttons</strong><br />
+The “buttons” that your game supports.<br />
+In our case, this is the 4 cardinal direction keys (keyboard),
+a 2-dimensional direction from a joystick,
+the 5 attack buttons “Punch”, “Kick”, “Slash”, “Heavy Slash”, “Dust”,
+and macro buttons for combinations like P+K+S or dash macro.</p>
+
+<p>We map our keys to our buttons.</p>
+
+<p><strong>Inputs</strong><br />
+The processed form of the buttons, after <a href="https://www.hitboxarcade.com/blogs/support/what-is-socd">SOCD cleaning</a>
+and macro button combinations have been applied.</p>
+
+<aside>
+Technically, we will be storing the diagonal directions as a combination of two
+cardinals, but logically we'll pretend those are a single diagonal.
+</aside>
+
+<p>For leverless devices like the keyboard, multiple buttons for contradictory directions can be pressed
+(Simultaneous Opposite Cardinal Directions),
+so we need to clean SOCDs and translate them into one of the 8 directions, or the neutral direction.</p>
+
+<p>Devices with levers/joysticks can’t do this, so we just translate the 2-dimensional input into the
+closest of the 8 directions, or neutral if the stick is in some defined deadzone.
+It might be okay to handle that in “Buttons” instead of “Inputs”, but it probably doesn’t really matter.</p>
+
+<p><strong>Actions</strong><br />
+The actions performed by the character in game after parsing the inputs.</p>
+
+<p>NB: We will consider inputs independent of state, and actions dependent on it.
+So inputs will use the absolute directions of left and right,
+while actions will have to consider which side of the opponent a character is on,
+and convert inputs’ “left or right” into forward or back.</p>
+
+<p>Due to this dependence on game state, the parsing of inputs into actions will
+occur in <code class="language-plaintext highlighter-rouge">update()</code>, not <code class="language-plaintext highlighter-rouge">processInput()</code>. This way, <code class="language-plaintext highlighter-rouge">processInput()</code> does not need
+to know anything about game state.</p>
+
+<h2 id="should-we-get-input-from-pygamekeyget_pressed-or-the-event-queue">Should we get input from pygame.key.get_pressed() or the event queue?</h2>
+
+<p>While filling in <code class="language-plaintext highlighter-rouge">processInput()</code>, we hit a fork in the road.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># main.py
+</span><span class="k">def</span> <span class="nf">processInput</span><span class="p">():</span>
+    <span class="c1"># Method (1): Use key.get_pressed()
+</span>    <span class="n">parseKeysPressed</span><span class="p">()</span>
+    
+    <span class="c1"># Method (2): Event queue (not used)
+</span>    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pg</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="n">get</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="n">pg</span><span class="p">.</span><span class="n">QUIT</span><span class="p">:</span>
+            <span class="n">cleanupGame</span><span class="p">()</span>
+            <span class="k">break</span>
+
+<span class="k">def</span> <span class="nf">cleanupGame</span><span class="p">():</span>
+    <span class="s">'''
+    Run any cleanup before exiting the game.
+    '''</span>
+    <span class="n">pg</span><span class="p">.</span><span class="n">quit</span><span class="p">()</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>In Pygame, we have <a href="https://www.pygame.org/docs/tut/newbieguide.html#managing-the-event-subsystem">one of two choices</a>
+in how we handle input:<br />
+We can either ask Pygame for a list of keys that being pressed at this very moment,
+or we can check Pygame’s event queue for a list of all the key presses and key releases
+that have occurred since the last time we checked the queue (ie. called <code class="language-plaintext highlighter-rouge">processInput()</code>).</p>
+
+<p>As a queue, the event queue method will catch all inputs, even if performance drops.
+If the performance of the game loop drops to 1 FPS, the queue will capture all frames’ worth of inputs
+during that second, while <code class="language-plaintext highlighter-rouge">key.get_pressed()</code> can only capture 1 frames’ worth of inputs.</p>
+
+<p>However, because it can capture multiple frames’ worth of inputs, the logic of <code class="language-plaintext highlighter-rouge">processInput()</code>
+becomes harder to get right as well. Even if it did only capture one frames’ worth of inputs,
+handling simultaneous button presses with the event queue requires juggling knowledge
+of key presses and key releases, which is also a little tricky.</p>
+
+<aside>
+I probably will revisit the event queue version of the `processInput()` eventually,
+even if we never hit performance issues, just because it will make a good lesson
+for the tutorial.
+</aside>
+
+<p>As stated in article #1, we will not spend unnecessary time worrying about performance before we have to.
+We’ll go with the simpler <code class="language-plaintext highlighter-rouge">key.get_pressed()</code> method for now just to keep us moving forward;
+if our game starts to have trouble maintaining 60 FPS, I will revisit this to make the switch.</p>
+
+<h2 id="defining-the-keybinds">Defining the keybinds</h2>
+
+<p>Let’s create a new file <code class="language-plaintext highlighter-rouge">inputs.py</code> to store our key, button, and input-related functions.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># inputs.py
+</span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="c1"># https://stackoverflow.com/questions/33533148
+# For type hinting support.
+</span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">import</span> <span class="nn">pygame.locals</span> <span class="k">as</span> <span class="nb">locals</span>
+<span class="kn">import</span> <span class="nn">pygame</span> <span class="k">as</span> <span class="n">pg</span>
+<span class="kn">import</span> <span class="nn">constants</span>
+
+<span class="k">class</span> <span class="nc">Button</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">LEFT</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">DOWN</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">UP</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">PUNCH</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">KICK</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">SLASH</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">HEAVY</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">DUST</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">MACRO_PK</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">MACRO_PD</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">MACRO_PKS</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">MACRO_PKSH</span> <span class="o">=</span> <span class="mi">23</span>
+
+<span class="c1"># define keybindings manually here
+# TODO: eventually replace with a proper menu interface for rebinding keys
+</span><span class="n">keybinds</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_7</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_8</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_9</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_SPACE</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_z</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_x</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_c</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_v</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">HEAVY</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_d</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">DUST</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_f</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKS</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_g</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PK</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_h</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PD</span>
+<span class="n">keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKSH</span>
+<span class="c1"># ...
+</span></code></pre></div></div>
+
+<p>A (literal) key-value pair dictionary stores our key mappings.
+I’ve used Python’s <a href="https://docs.python.org/3/howto/enum.html#">Enum</a> feature to define our buttons.</p>
+
+<p>You can use literal strings (“punch”, “kick”, etc) instead of Enums, as I did initially, but if you ever misspell one of these strings
+(“puncg”) in your logic later down the line, the logic may fail silently, which is troublesome to debug.
+Enums will cause an error at runtime if misspelled, so they are safer to use.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># inputs.py
+# ...
+</span><span class="n">macro_defs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">macro_defs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PK</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">]</span>
+<span class="n">macro_defs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PD</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DUST</span><span class="p">]</span>
+<span class="n">macro_defs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span><span class="p">]</span>
+<span class="n">macro_defs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKSH</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">HEAVY</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">keysPressedToInput</span><span class="p">(</span><span class="n">current_frame</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Input</span><span class="p">:</span>
+    <span class="s">'''
+    Takes an int current_frame,
+    checks pygame.key.keys_pressed() for all keys currently pressed,
+    and returns an Input created with a dict of all assigned Buttons pressed
+    (after SOCD cleaning) and current_frame.
+    '''</span>
+    <span class="n">keys_pressed</span> <span class="o">=</span> <span class="n">pg</span><span class="p">.</span><span class="n">key</span><span class="p">.</span><span class="n">get_pressed</span><span class="p">()</span>
+    <span class="n">frame_buttons</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Button</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">button</span><span class="p">)</span> <span class="ow">in</span> <span class="n">keybinds</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">frame_buttons</span><span class="p">[</span><span class="n">button</span><span class="p">]</span> <span class="o">=</span> <span class="n">keys_pressed</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+    <span class="k">for</span> <span class="n">macro_button</span> <span class="ow">in</span> <span class="n">macro_defs</span><span class="p">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">frame_buttons</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">macro_button</span><span class="p">)</span> <span class="ow">and</span> <span class="n">frame_buttons</span><span class="p">[</span><span class="n">macro_button</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">button</span> <span class="ow">in</span> <span class="n">macro_defs</span><span class="p">[</span><span class="n">macro_button</span><span class="p">]:</span>
+                <span class="n">frame_buttons</span><span class="p">[</span><span class="n">button</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+    
+    <span class="n">frame_buttons</span> <span class="o">=</span> <span class="n">cleanSocdButtons</span><span class="p">(</span><span class="n">frame_buttons</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Input</span><span class="p">(</span><span class="n">frame_buttons</span><span class="p">,</span> <span class="n">current_frame</span><span class="p">,</span> <span class="n">current_frame</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#...
+</span></code></pre></div></div>
+
+<p>We define some macro buttons as well, and <code class="language-plaintext highlighter-rouge">keysPressedToInput()</code>, which neatly
+translates the keys of <code class="language-plaintext highlighter-rouge">pg.key.get_pressed()</code> into our Buttons.</p>
+
+<p>It eventually creates an Input,</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># inputs.py
+# ...
+</span><span class="k">class</span> <span class="nc">Input</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buttons</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Button</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">start_frame</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_frame</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">buttons</span> <span class="o">=</span> <span class="n">buttons</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">start_frame</span> <span class="o">=</span> <span class="n">start_frame</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">end_frame</span> <span class="o">=</span> <span class="n">end_frame</span>
+        
+    <span class="c1"># https://stackoverflow.com/questions/390250
+</span>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Input</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">buttons</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">buttons</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">.</span><span class="n">start_frame</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">start_frame</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">.</span><span class="n">end_frame</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">end_frame</span>
+        <span class="k">return</span> <span class="nb">NotImplemented</span>
+
+<span class="c1"># ...
+</span></code></pre></div></div>
+
+<p>after running the buttons through <code class="language-plaintext highlighter-rouge">cleanSocdButtons()</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># inputs.py
+# ...
+</span><span class="k">def</span> <span class="nf">cleanSocdButtons</span><span class="p">(</span><span class="n">frame_buttons</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Button</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Button</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+    <span class="s">'''
+    Takes a dict with each assigned Button pressed this frame, 
+    and returns a copy of it with SOCD cases handled:
+    - UP + DOWN = neutral, remove both
+    - LEFT + RIGHT = neutral, remove both
+    
+    Note that these don't both have to be handled the same way.
+    '''</span>
+    <span class="n">cleaned_inputs</span> <span class="o">=</span> <span class="n">frame_buttons</span>
+    <span class="k">if</span> <span class="n">cleaned_inputs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">]</span> <span class="ow">and</span> <span class="n">cleaned_inputs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">]:</span>
+        <span class="n">cleaned_inputs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">cleaned_inputs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">cleaned_inputs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">]</span> <span class="ow">and</span> <span class="n">cleaned_inputs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">]:</span>
+        <span class="n">cleaned_inputs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">cleaned_inputs</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="n">cleaned_inputs</span>
+
+<span class="c1"># ...
+</span></code></pre></div></div>
+
+<p>These functions are all we need to convert from Keys to Input.
+We call these functions in <code class="language-plaintext highlighter-rouge">main.py</code>’s <code class="language-plaintext highlighter-rouge">parseKeysPressed()</code> to create an Input.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># main.py
+# ...
+</span><span class="kn">import</span> <span class="nn">inputs</span>
+<span class="c1"># ...
+</span><span class="n">current_frame</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">inputHistoryP1</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">InputHistory</span><span class="p">(</span><span class="s">"P1"</span><span class="p">)</span>
+<span class="n">inputHistoryP2</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">InputHistory</span><span class="p">(</span><span class="s">"P2"</span><span class="p">)</span>
+<span class="c1"># ...
+</span><span class="k">def</span> <span class="nf">parseKeysPressed</span><span class="p">():</span>
+    <span class="s">'''
+    Checks what keys are currently being pressed, 
+    and creates a corresponding Input in input_history.
+    '''</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">keysPressedToInput</span><span class="p">(</span><span class="n">current_frame</span><span class="p">)</span>
+    <span class="n">inputHistoryP1</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+</code></pre></div></div>
+
+<aside>
+Download the Segoe UI Symbol font <a href="https://freefontsdownload.net/free-segoeuisymbol-font-135679.htm">here</a>
+and add it to an `assets` folder.
+
+Thanks to <a href="https://stackoverflow.com/questions/61974883/unicode-characters-not-showing-when-displaying-to-pygame">
+this StackOverflow answer</a>
+for how to render the Unicode directional arrows.
+</aside>
+
+<p>We’ll store these Inputs in a slightly modified container class, InputHistory.
+This allows us to implement some custom logic when adding new Inputs in <code class="language-plaintext highlighter-rouge">append()</code>,
+and it also allows us to give it its own <code class="language-plaintext highlighter-rouge">render()</code> method that we can slot right into <code class="language-plaintext highlighter-rouge">main.py</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># inputs.py
+# ...
+</span><span class="k">class</span> <span class="nc">InputHistory</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">player</span> <span class="o">=</span> <span class="n">player</span> <span class="c1"># "P1" or "P2"
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Input</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Input</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="s">'''
+        Takes an Input and adds it to self.inputs,
+        and removes old inputs from self.inputs.
+        '''</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">input</span><span class="p">.</span><span class="n">buttons</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">buttons</span><span class="p">:</span>
+            <span class="c1"># If input buttons are the same as last input,
+</span>            <span class="c1"># combine it with last input instead of making a duplicate.
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">end_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">end_frame</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+            
+        <span class="c1"># Don't need to keep inputs after a certain amount of time has passed.
+</span>        <span class="c1"># Down/back charge history will be stored in game state,
+</span>        <span class="c1"># so deleting old inputs has no effect on charge moves.
+</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="p">:</span> <span class="n">pg</span><span class="p">.</span><span class="n">surface</span><span class="p">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">font</span> <span class="o">=</span> <span class="n">pg</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">Font</span><span class="p">(</span><span class="s">"assets/seguisym.ttf"</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">)):</span>
+            <span class="c1"># Print the newest inputs first, closer to the top.
+</span>            <span class="nb">input</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">inputs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span>
+            
+            <span class="n">arrow_direction</span> <span class="o">=</span> <span class="n">directionsToArrow</span><span class="p">(</span><span class="nb">input</span><span class="p">.</span><span class="n">buttons</span><span class="p">)</span>
+            <span class="n">attack_buttons</span> <span class="o">=</span> <span class="n">attackButtonsToLetters</span><span class="p">(</span><span class="nb">input</span><span class="p">.</span><span class="n">buttons</span><span class="p">)</span>
+            <span class="n">input_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">arrow_direction</span><span class="si">}</span><span class="s"> </span><span class="si">{</span><span class="n">attack_buttons</span><span class="si">}</span><span class="s"> </span><span class="si">{</span><span class="nb">input</span><span class="p">.</span><span class="n">end_frame</span> <span class="o">-</span> <span class="nb">input</span><span class="p">.</span><span class="n">start_frame</span><span class="si">}</span><span class="s">"</span>
+            
+            <span class="n">text</span> <span class="o">=</span> <span class="n">font</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">input_string</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">constants</span><span class="p">.</span><span class="n">WHITE</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">player</span> <span class="o">==</span> <span class="s">"P1"</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">constants</span><span class="p">.</span><span class="n">WINDOW_WIDTH</span> <span class="o">-</span> <span class="mi">80</span>
+            <span class="n">display</span><span class="p">.</span><span class="n">blit</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">15</span> <span class="o">*</span> <span class="n">i</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>(The logic behind deleting old inputs is probably not perfect, but it probably doesn’t have to be, either.)</p>
+
+<p>We also implement some basic helper methods to convert Inputs into a text form, for InputHistory’s <code class="language-plaintext highlighter-rouge">render()</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># inputs.py
+</span><span class="k">def</span> <span class="nf">directionsToArrow</span><span class="p">(</span><span class="n">buttons</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Button</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="s">'''
+    Takes a dict of buttons pressed,
+    and returns a character of the arrow corresponding to their direction
+    (or ' ' for neutral).
+    
+    It is assumed that the buttons have already been SOCD cleaned.
+    '''</span>
+    <span class="k">if</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s">'↖'</span> <span class="c1">#
+</span>        <span class="k">elif</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s">'↙'</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">'←'</span>
+    <span class="k">elif</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s">'↗'</span>
+        <span class="k">elif</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s">'↘'</span> <span class="c1">#
+</span>        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">'→'</span>
+    <span class="k">elif</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s">'↓'</span>
+    <span class="k">elif</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s">'↑'</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">' '</span>
+
+<span class="k">def</span> <span class="nf">attackButtonsToLetters</span><span class="p">(</span><span class="n">buttons</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Button</span><span class="p">,</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="s">'''
+    Takes a dict of buttons pressed
+    and returns a string of letters (or ' ' for nothing)
+    representing all attack buttons pressed.
+    '''</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="s">""</span>
+    <span class="k">if</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">]:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="s">"P"</span>
+    <span class="k">if</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">]:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="s">"K"</span>
+    <span class="k">if</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span><span class="p">]:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="s">"S"</span>
+    <span class="k">if</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">HEAVY</span><span class="p">]:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="s">"H"</span>
+    <span class="k">if</span> <span class="n">buttons</span><span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">DUST</span><span class="p">]:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="s">"D"</span>
+    <span class="k">return</span> <span class="n">string</span>
+
+</code></pre></div></div>
+
+<p>We can now add this into our <code class="language-plaintext highlighter-rouge">main.py</code> game loop:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># main.py
+# ... 
+</span><span class="k">def</span> <span class="nf">render</span><span class="p">():</span>
+    <span class="n">window</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">constants</span><span class="p">.</span><span class="n">BLACK</span><span class="p">)</span>
+    <span class="n">fpsCounter</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+    <span class="n">inputHistoryP1</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+    <span class="n">inputHistoryP2</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="n">window</span><span class="p">)</span> <span class="c1"># no Inputs being added here right now
+</span>    
+    <span class="n">pg</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">update</span><span class="p">()</span>
+
+<span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+    <span class="n">processInput</span><span class="p">()</span>
+    <span class="n">update</span><span class="p">()</span>
+    <span class="n">render</span><span class="p">()</span>
+    
+    <span class="n">current_frame</span> <span class="o">=</span> <span class="n">current_frame</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">fpsCounter</span><span class="p">.</span><span class="n">clock</span><span class="p">.</span><span class="n">tick</span><span class="p">(</span><span class="n">constants</span><span class="p">.</span><span class="n">FRAME_RATE_CAP</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And that’s all we need to get Inputs running and displayable.</p>
+
+<p><img src="/assets/images/article2/input-display.gif" alt="Gif of our game, inputs displaying in all their glory" /></p>
+
+<p>Nothing too glamorous, but it gets the job done.<br />
+Ah, pushing buttons to make all sorts of text spool out rapidly is quite fun.</p>
+
+<h2 id="stopping-point">Stopping point</h2>
+
+<p>Not a bad place to stop - our Inputs system seems to work fine,
+and is decoupled enough from other systems that we shouldn’t need to
+touch it much when we begin work on <code class="language-plaintext highlighter-rouge">update()</code>.</p>
+
+<p>We are missing a few things in the Inputs system, like a second set of keybindings for player 2,
+there are some <a href="https://en.wikipedia.org/wiki/Magic_number_(programming)">magic numbers</a>
+littered around that need to be cleaned up at some point,
+and we will need to bosh it around some more for GGPO, rollback, and netplay,
+but it’s enough for now.</p>
+
+<p><a href="https://github.com/tuningdipsw/fighting-game-tutorial/tree/article2-inputs"><img src="/assets/images/download-on-github.png" alt="How to download from GitHub" /></a></p>
+
+<p><em><code class="language-plaintext highlighter-rouge">python main.py</code> when in the same directory as <code class="language-plaintext highlighter-rouge">main.py</code> to run it.</em></p>
+
+<p><a href="https://github.com/tuningdipsw/fighting-game-tutorial/tree/article2-inputs">I’ve uploaded the code for this article on GitHub here</a>,
+where you can read it in uninterrupted form, or download it to try it yourself.</p>
+
+<p>If we look back at our “Eventual goals”, we’ve currently managed “Display inputs on screen” and
+“Avoid hardcoding keybinds into our business logic”.</p>
+
+<p>But before we can work on parsing our Inputs into actions, we’ll need to build up our game state.
+We’ll begin tackling this in article #3.</p>
+
+<p>Coming to a blog, which is this one, at a time when it’s ready, which is soon (I hope). Look forward to it.</p>
+
+<p><a href="/fgtutorial/2023/02/26/article3-game-state-1.html">» Next: #3: Game state</a></p>
+
+<h3 id="bonus-setting-up-some-unit-tests">Bonus: Setting up some unit tests</h3>
+
+<p>I’ve also written a short mini-article on adding a few unit tests for <code class="language-plaintext highlighter-rouge">inputs.py</code>.<br />
+This is not necessary in order to build our game, but it is an important part of programming at large,
+and I couldn’t find a direct mention of setting up tests within the Pygame tutorials,
+so I thought I would share something about how I set mine up, and some of the resources I drew upon to do so.</p>
+
+<p>It’s more of a general Python or programming topic than a Pygame one, but I think it’ll be quite helpful to cover.</p>
+
+<p><a href="/fgtutorial/2023/02/12/article2-1-unit-testing-examples.html">» Next: #2.1: Unit testing examples</a></p>
+
+<h3 id="article-meta">Article meta</h3>
+
+<p>Code fragments make up the body of this article, but I’m not sure how effective it was.</p>
+
+<p>I think it’s better than writing pure abstract theory of what needs to be done,
+but most of my non-code comments turned out rather light.
+I am reasonably proud that my code is neat and well-commented enough to be self-documenting, at least in my opinion,
+but it did make my non-code comments feel a bit obvious when I wrote them.</p>
+
+<p>But I think there is some merit to providing a logical order for looking through the code.<br />
+It feels more approachable than throwing a whole GitHub repository at the reader.<br />
+Learning to read through one of those is a useful skill, but it’s always a bit daunting.</p>
+
+<p>If you have any complaints or feedback about the format, please let me know in the comments below.</p>
+
+<hr />
+
+<p><a href="/fgtutorial/2023/02/26/article3-game-state-1.html">» Next: #3: Game state</a></p>
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = "https://tuningdipsw.github.io/fgtutorial/2023/02/06/article2-inputs.html";
+	this.page.identifier = "/fgtutorial/2023/02/06/article2-inputs.html";
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://tuning-2.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  </body>
+</html>

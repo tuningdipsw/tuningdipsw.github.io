@@ -1,0 +1,596 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Let's make a fighting game #2.1: Unit testing examples</title>
+	<link rel="stylesheet" href="/assets/css/styles.css">
+	<link type="application/atom+xml" rel="alternate" href="https://tuningdipsw.github.io/pages/tuningdipsw/feed.xml" title="Home of one of the Hellsinker. players of all time" />
+	<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Let’s make a fighting game #2.1: Unit testing examples | Home of one of the Hellsinker. players of all time</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Let’s make a fighting game #2.1: Unit testing examples" />
+<meta name="author" content="minogame" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="« Prev: #2: Inputs Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. It is technically possible to write code without testing, in the same way that it is technically possible to draw with your eyes closed. Both regular testing, by running your game, and automated testing, by writing a suite of tests after making changes to your game, allow you to be more confident about the correctness of your code, and help catch bugs your new changes might introduce. You might feel that writing tests is an unnecessary chore. I also felt that way before I wrote these tests, but I think I wouldn’t have that gut reaction if I’d just found just the tutorial I was looking for to show me how to do it. For that reason, I’ll be sharing a brief account of what I did to set up unit testing for article #2. I hope you find it useful." />
+<meta property="og:description" content="« Prev: #2: Inputs Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. It is technically possible to write code without testing, in the same way that it is technically possible to draw with your eyes closed. Both regular testing, by running your game, and automated testing, by writing a suite of tests after making changes to your game, allow you to be more confident about the correctness of your code, and help catch bugs your new changes might introduce. You might feel that writing tests is an unnecessary chore. I also felt that way before I wrote these tests, but I think I wouldn’t have that gut reaction if I’d just found just the tutorial I was looking for to show me how to do it. For that reason, I’ll be sharing a brief account of what I did to set up unit testing for article #2. I hope you find it useful." />
+<link rel="canonical" href="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/02/12/article2-1-unit-testing-examples.html" />
+<meta property="og:url" content="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/02/12/article2-1-unit-testing-examples.html" />
+<meta property="og:site_name" content="Home of one of the Hellsinker. players of all time" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-02-12T15:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Let’s make a fighting game #2.1: Unit testing examples" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"minogame"},"dateModified":"2023-02-12T15:00:00+00:00","datePublished":"2023-02-12T15:00:00+00:00","description":"« Prev: #2: Inputs Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. It is technically possible to write code without testing, in the same way that it is technically possible to draw with your eyes closed. Both regular testing, by running your game, and automated testing, by writing a suite of tests after making changes to your game, allow you to be more confident about the correctness of your code, and help catch bugs your new changes might introduce. You might feel that writing tests is an unnecessary chore. I also felt that way before I wrote these tests, but I think I wouldn’t have that gut reaction if I’d just found just the tutorial I was looking for to show me how to do it. For that reason, I’ll be sharing a brief account of what I did to set up unit testing for article #2. I hope you find it useful.","headline":"Let’s make a fighting game #2.1: Unit testing examples","mainEntityOfPage":{"@type":"WebPage","@id":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/02/12/article2-1-unit-testing-examples.html"},"url":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/02/12/article2-1-unit-testing-examples.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+	<div class="page sidebar">
+    <nav class="top">
+<table>
+<tr>
+  
+  <td>
+    <a href="/" >
+      Home
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/about/" >
+      About
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/table-of-contents.html" >
+      Contents
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/staff.html" >
+      Author
+    </a>
+  <td class="gap">
+  
+</tr>
+</table
+</nav>
+
+    <h1 class="pagetitle">TUNINGDIPSW</h1>
+	<h4>Instructional website for a fighting game developer</h4>
+	<h2> Let's make a fighting game #2.1: Unit testing examples </h2>
+	<div class="content">
+    <p>
+  12 Feb 2023
+  
+  
+    - <a href="/authors/tuningdipsw.html">TUNING DIPSW (Andrew Hsu)</a>
+  
+</p>
+
+<div id="table-of-contents">
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#manual-testing">Manual testing</a></li>
+<li class="toc-entry toc-h2"><a href="#automated-testing">Automated testing</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#what-functions-should-we-test">What functions should we test?</a></li>
+<li class="toc-entry toc-h3"><a href="#how-do-we-test">How do we test?</a></li>
+<li class="toc-entry toc-h3"><a href="#what-tests-should-we-write">What tests should we write?</a></li>
+<li class="toc-entry toc-h3"><a href="#test_cleansocdbuttons">test_cleanSocdButtons()</a></li>
+<li class="toc-entry toc-h3"><a href="#test_keyspressedtoinput">test_keysPressedToInput()</a></li>
+<li class="toc-entry toc-h3"><a href="#test_inputhistory_append">test_inputHistory_append()</a></li>
+<li class="toc-entry toc-h3"><a href="#bonus-the-debugger-a-useful-ide-feature">Bonus: The debugger, a useful IDE feature</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#additional-reading">Additional reading</a></li>
+<li class="toc-entry toc-h2"><a href="#advance-to-the-next-article">Advance to the next article</a></li>
+</ul> 
+</div>
+
+<p><a href="/fgtutorial/2023/02/06/article2-inputs.html">« Prev: #2: Inputs</a></p>
+
+<p>Good day. In this series of articles, I’ll be attempting to program a simple 2D
+fighting game using the Python game development library Pygame.</p>
+
+<p>It is technically possible to write code without testing, in the same way that it
+is technically possible to draw with your eyes closed.</p>
+
+<p>Both regular testing, by running your game, and automated testing,
+by writing a suite of tests after making changes to your game,
+allow you to be more confident about the correctness of your code,
+and help catch bugs your new changes might introduce.</p>
+
+<p>You might feel that writing tests is an unnecessary chore.<br />
+I also felt that way before I wrote these tests,
+but I think I wouldn’t have that gut reaction if I’d just found
+just the tutorial I was looking for to show me how to do it.</p>
+
+<p>For that reason, I’ll be sharing a brief account of what I did to set up
+unit testing for article #2. I hope you find it useful.</p>
+
+<!--more-->
+
+<h2 id="manual-testing">Manual testing</h2>
+
+<p>is just the act of running your game, or the relevant section of it,
+and testing that whatever change you just made to the code:</p>
+
+<ul>
+  <li>doesn’t immediately crash</li>
+  <li>does what you expected your code to do</li>
+  <li>doesn’t cause any obvious changes in the rest of your game</li>
+</ul>
+
+<p>And so, your normal development process (of any code, not just games)
+is just a cycle of writing bits of your desired code in steps that should work,
+running it and fixing the errors when it doesn’t, and slowly building on each of those steps
+until the desired functionality has been achieved.</p>
+
+<p>Coding becomes a lot harder when you’re unable to figure out how to subdivide your problem into testable steps,
+or if you try to write too much code in one go without testing; learning how to do this is part of learning to code.</p>
+
+<p>I believe my development process of article #2 went something like this:</p>
+
+<ul>
+  <li>
+    <p>Cribbed a basic game loop and FPS counter off of a <a href="https://coderslegacy.com/python/display-fps-pygame/">tutorial</a>
+that I knew would work</p>
+  </li>
+  <li>
+    <p>Set up the <code class="language-plaintext highlighter-rouge">keybinds</code> dictionary</p>
+  </li>
+  <li>
+    <p>Figured out how to convert <code class="language-plaintext highlighter-rouge">pg.key.get_pressed()</code> into a <code class="language-plaintext highlighter-rouge">dict[Button, bool]</code> using <code class="language-plaintext highlighter-rouge">keybinds</code> in <code class="language-plaintext highlighter-rouge">keysPressedToInput()</code></p>
+  </li>
+  <li>
+    <p>Started printing this dictionary of Buttons to console in <code class="language-plaintext highlighter-rouge">main.py</code>, so I could see the buttons I pressed appear</p>
+  </li>
+  <li>
+    <p>Added <code class="language-plaintext highlighter-rouge">cleanSocdButtons()</code> to <code class="language-plaintext highlighter-rouge">keysPressedToInput()</code></p>
+  </li>
+  <li>
+    <p>Started blitting the rendered text of each dictionary of Buttons to the screen with <code class="language-plaintext highlighter-rouge">directionsToArrow()</code> and <code class="language-plaintext highlighter-rouge">attackButtonsToLetters()</code></p>
+  </li>
+  <li>
+    <p>Fiddled around with the format of <code class="language-plaintext highlighter-rouge">keybinds</code>, changing it from <code class="language-plaintext highlighter-rouge">key: str</code> to <code class="language-plaintext highlighter-rouge">key: list(str)</code>
+as a way of implementing macro keys nicely</p>
+  </li>
+  <li>
+    <p>Defined the <code class="language-plaintext highlighter-rouge">Input</code> class as a proper form of the <code class="language-plaintext highlighter-rouge">dict[Button, bool]</code></p>
+  </li>
+  <li>
+    <p>Defined the <code class="language-plaintext highlighter-rouge">InputHistory</code> class to replace the <code class="language-plaintext highlighter-rouge">list[dict[Button, bool]]</code> I was using in <code class="language-plaintext highlighter-rouge">main.py</code>, and formalized
+the <code class="language-plaintext highlighter-rouge">append()</code> and <code class="language-plaintext highlighter-rouge">render()</code> functions there</p>
+  </li>
+  <li>
+    <p>Replaced the strings in <code class="language-plaintext highlighter-rouge">keybinds</code> with safer <code class="language-plaintext highlighter-rouge">Button</code> Enums</p>
+  </li>
+  <li>
+    <p>Reverted <code class="language-plaintext highlighter-rouge">keybinds</code> to <code class="language-plaintext highlighter-rouge">key: Button</code> and implemented the macro keys as a separate dictionary, because it made
+the <code class="language-plaintext highlighter-rouge">keysPressedToInput()</code> logic neater</p>
+  </li>
+</ul>
+
+<p>…all the while hitting the VSCode “Run without Debugging (Ctrl+F5)” button until I had a working input system,
+and then going a little further with some refactoring at the end.</p>
+
+<aside>
+The bug was that P,K,S would not appear if the Punch, Kick, or Slash keybinds
+were pressed on their own, only from pressing the macro_PKS button.
+<br />
+<br />
+When the `for` loop finally iterated to the macro_PKS keybind after handling the rest of the keybinds,
+the macro_PKS not being down overwrote frame_buttons[Button.PUNCH] to `= False`, from the `= True` that had been set by the Punch keybind
+(and so on).
+</aside>
+
+<p>However, I had actually introduced a bug that I didn’t notice in my manual testing for some time
+when I changed <code class="language-plaintext highlighter-rouge">keybinds</code> from <code class="language-plaintext highlighter-rouge">key: str</code> to <code class="language-plaintext highlighter-rouge">key: list(str)</code>.
+The details of the bug are not important, but the fact that I’d missed it for even a short period of time
+made me think “I really need to set up some automated unit tests, I shouldn’t put this off any longer.”</p>
+
+<p>As your program gets larger and your codebase more complex, it becomes harder to hold
+it all in your head and more tiring to test. At some point you’ll start missing things.
+This is where you need to start automating your testing.</p>
+
+<h2 id="automated-testing">Automated testing</h2>
+
+<p>More specifically, <em>regression testing</em> is the act of checking that things that you had working in the past
+haven’t stopped working (haven’t regressed) after you’ve made a change. As you can imagine, the amount of
+regression testing you need to perform only goes up as you code;
+in order to keep that workload manageable, you have to automate it.</p>
+
+<p>Any programming language that people use to code <em>will</em> have some libraries for testing.
+Python’s main ones are <em>unittest</em> and <em>pytest</em>.</p>
+
+<blockquote>
+  <p>As I am not an experienced coder, game programmer, or Pygame user,
+I suspect my approach is likely imperfect. I’d love to hear more about how you’ve
+set up your own Python and Pygame tests in the comments section below the article.</p>
+</blockquote>
+
+<h3 id="what-functions-should-we-test">What functions should we test?</h3>
+
+<p>Although it’s tempting to say “everything”, and perhaps if you’re very idealistic you said that too,
+it is also possible to write more tests than you strictly need to. It’s not the end of the world
+if you do, but if you’re smart and <strong>intentional</strong> about which ones you skip, you may be able to save
+some of your mental strength for other, more important tasks.</p>
+
+<p>I didn’t write tests for all of my functions -
+for example, <code class="language-plaintext highlighter-rouge">directionsToArrow()</code> and <code class="language-plaintext highlighter-rouge">attackButtonsToLetter()</code> are untested because
+they are basically helper functions simple enough to reason correctness,
+and they are of low importance, since they don’t affect game logic, only rendering.<br />
+So I don’t expect to modify them in the future, and I don’t feel worried about skipping them.</p>
+
+<p>A further caveat we might run into is that some parts of games don’t translate well to automated testing.
+Take our <code class="language-plaintext highlighter-rouge">render()</code> functions -</p>
+
+<p>It’s easy enough for us to verify by hand and by eye that <code class="language-plaintext highlighter-rouge">render()</code> is correct by running our program and checking
+that it displays such-and-such, that it “looks right”,
+but it’s hard to define what “correct” or “looks right” is at the code level.
+Audio cues (“sounds right”) or responsiveness (“feels right”) have the same issue.</p>
+
+<p>As far as I know, we must take it on faith that Pygame will handle drawing, audio, and inputs
+correctly; we trust that these aspects of this library we’re making use of have already been tested.</p>
+
+<p>That doesn’t mean that we can’t write any tests if our functions happen to touch Pygame even once,
+but the easiest tests for us to write will be for code whose logic is cleanly separated from Pygame elements.</p>
+
+<h3 id="how-do-we-test">How do we test?</h3>
+
+<p>Although I expressed the difficulty of writing automated tests around Pygame, we’re not entirely helpless.
+We can make some use of <a href="https://docs.python.org/3/library/unittest.mock.html#the-mock-class"><code class="language-plaintext highlighter-rouge">unittest.mock</code>’s functions</a>
+in the <code class="language-plaintext highlighter-rouge">mock.call_count()</code> and <code class="language-plaintext highlighter-rouge">mock.assert_called_with()</code> family.</p>
+
+<p>That is, although our tests cannot verify how the results handled by the Pygame library “look” or “sound”,
+we can write tests that verify that certain Pygame functions such as <code class="language-plaintext highlighter-rouge">surface.blit()</code> are being called
+<code class="language-plaintext highlighter-rouge">X</code> number of times and with <code class="language-plaintext highlighter-rouge">Y, Z...</code> parameters.</p>
+
+<p>The actual “automated” part of running the tests can then be done with a single keyboard shortcut (in VSCode: <code class="language-plaintext highlighter-rouge">Ctrl + ; then A</code>)
+whenever you feel the need to check for regressions (e.g. right before you do a manual test as part of your normal development).</p>
+
+<p>The tests themselves, through the use of the <code class="language-plaintext highlighter-rouge">unittest</code>/<code class="language-plaintext highlighter-rouge">pytest</code> libraries, are pretty straightforward.
+We’ll see what some of the actual tests look like shortly.</p>
+
+<h3 id="what-tests-should-we-write">What tests should we write?</h3>
+
+<p>As the name “unit testing” implies, we start with the smallest functions, the most atomic parts
+of our code, and write tests to verify their correctness. We don’t worry so much about how
+different modules work together, we plan to handle that with “integration tests”.</p>
+
+<aside>
+See <a href="https://blog.miguelgrinberg.com/post/how-to-write-unit-tests-in-python-part-2-game-of-life">
+Practical unittest and pytest example, part 2, </a>
+also represented in Additional reading below.
+</aside>
+
+<p>Test coverage is the idea that your tests should cover 100% of the paths your code can take, and there are some
+plugins that you can set up to calculate this percentage for you.
+I didn’t set one up myself, but it is an option.</p>
+
+<p>In any case, covering all the code paths is the goal of your testing.<br />
+Test single cases, test overlapping cases, test functions that use other functions, and so on.</p>
+
+<blockquote>
+  <p>Custom user input requires especially careful input validation, although games don’t have as much of this as,
+say, websites or apps do.</p>
+
+  <p>Think carefully about what inputs are possible to pass to a function, which ones you want to accept
+and which ones should be rejected.
+A good practice is for your function to begin by making assertions about its inputs, even those not from users,
+just to define and check your assumptions about the inputs.</p>
+</blockquote>
+
+<h3 id="test_cleansocdbuttons"><code class="language-plaintext highlighter-rouge">test_cleanSocdButtons()</code></h3>
+
+<p>I started with one of the simpler functions, since I wasn’t familiar with <code class="language-plaintext highlighter-rouge">pytest</code> yet.</p>
+
+<p>Although I don’t have its original form any more, I probably wrote it as something like this at first:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/test_inputs.py
+</span><span class="k">def</span> <span class="nf">test_cleanSocdButtons_LR_neutral</span><span class="p">():</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="p">{</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="p">{</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">cleanSocdButtons</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">output</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre></div></div>
+
+<p>This can be generalized to multiple test cases with <code class="language-plaintext highlighter-rouge">pytest</code>’s <code class="language-plaintext highlighter-rouge">parametrize</code> annotation:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/test_inputs.py
+</span><span class="n">cleanSocdButtons_testcases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># L+R = neutral
+</span>    <span class="p">({</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+     <span class="p">{</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="bp">True</span><span class="p">}),</span>
+    
+    <span class="c1"># U+D = neutral
+</span>    <span class="p">({</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+     <span class="p">{</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="bp">False</span><span class="p">}),</span>
+    
+    <span class="c1"># both rules at the same time
+</span>    <span class="p">({</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+     <span class="p">{</span><span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
+<span class="p">]</span>
+
+<span class="o">@</span><span class="n">pytest</span><span class="p">.</span><span class="n">mark</span><span class="p">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s">"test_input, expected"</span><span class="p">,</span> <span class="n">cleanSocdButtons_testcases</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_cleanSocdButtons</span><span class="p">(</span><span class="n">test_input</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">inputs</span><span class="p">.</span><span class="n">cleanSocdButtons</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre></div></div>
+
+<p>This one wasn’t too hard, since the tested function doesn’t call any other functions,
+interact with complex classes, and doesn’t even have many cases to cover. So we’ve got the hang of it now.
+Maybe we had to do a little finagling with settings to get VSCode to detect the test (I think I had to
+create a blank <code class="language-plaintext highlighter-rouge">__init__.py</code> file in the <code class="language-plaintext highlighter-rouge">test</code> folder), but we were able to get a simple test running.</p>
+
+<h3 id="test_keyspressedtoinput"><code class="language-plaintext highlighter-rouge">test_keysPressedToInput()</code></h3>
+
+<p>Now for the tricky one – this one has messier inputs and uses mocks.</p>
+
+<p>The first mock we’ll need to use is for <code class="language-plaintext highlighter-rouge">pygame.key.get_pressed()</code>.</p>
+
+<p>Ok, we don’t actually need it - we could instead write our way around this
+by rewriting the <code class="language-plaintext highlighter-rouge">keysPressedToInput()</code> function in <code class="language-plaintext highlighter-rouge">inputs</code>
+to take in a list of key names as a parameter, instead of calling <code class="language-plaintext highlighter-rouge">pygame.key.get_pressed()</code> within the function.
+Then we just make that list the testcase input instead of intercepting <code class="language-plaintext highlighter-rouge">pygame.key.get_pressed()</code> with a mock in this test.</p>
+
+<p>I didn’t do it this time because I wanted to learn how to get this mock to work,
+but I don’t believe there’s a strong reason against doing so.</p>
+
+<p>Either way, we write a little helper function to convert
+lists like <code class="language-plaintext highlighter-rouge">[locals.K_z, locals.K_x, locals.K_c, locals.K_v, locals.K_d]</code>
+into the Pygame <code class="language-plaintext highlighter-rouge">key.get_pressed()</code> format (with all the empty spaces for keys unpressed):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/test_inputs.py
+</span><span class="k">def</span> <span class="nf">create_key_mock</span><span class="p">(</span><span class="n">pressed_key_list</span><span class="p">):</span>
+    <span class="s">'''
+    Takes a list of key names (pygame.locals, which are technically ints)
+    and returns a simulated pygame.key.get_pressed() output with those keys pressed.
+    '''</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">300</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">pressed_key_list</span><span class="p">:</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">tmp</span>
+</code></pre></div></div>
+
+<p>The other mock we’ll need is for <code class="language-plaintext highlighter-rouge">inputs.keybinds</code>:
+While we could use <code class="language-plaintext highlighter-rouge">inputs.keybinds</code> to determine what <code class="language-plaintext highlighter-rouge">pygame.locals.[key]</code>s to feed into
+our testcase inputs, if we think ahead, we’re eventually going to have to support
+rebinding keys, so this might cause a temporary break in these tests when we make that change
+and remove the hardcoded <code class="language-plaintext highlighter-rouge">keybinds</code> definition in <code class="language-plaintext highlighter-rouge">inputs</code>. Sure, we can fix that when we get there,
+but we can also try to handle that ahead of time.</p>
+
+<p>We’ll instead fix <code class="language-plaintext highlighter-rouge">keybinds</code> to a dictionary in this test file and mock that into <code class="language-plaintext highlighter-rouge">keysPressedToInput()</code>
+when we test it, so that our <code class="language-plaintext highlighter-rouge">pygame.locals.[key]</code> test inputs are unaffected if
+we change <code class="language-plaintext highlighter-rouge">inputs.keybinds</code> in the future.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/test_inputs.py
+</span><span class="n">default_keybinds</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_7</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">LEFT</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_8</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">DOWN</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_9</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">RIGHT</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_SPACE</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">UP</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_z</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_x</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_c</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_v</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">HEAVY</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_d</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">DUST</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_f</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKS</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_g</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PK</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_h</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PD</span>
+<span class="n">default_keybinds</span><span class="p">[</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKSH</span>
+<span class="c1"># yeah, this is a copy of what's in inputs.py right now
+</span></code></pre></div></div>
+
+<p>Disclosure: It took me some time to figure out how to mock <code class="language-plaintext highlighter-rouge">keybinds</code>,
+because I initially tried to do it with</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">mock</span><span class="p">.</span><span class="n">patch</span><span class="p">.</span><span class="nb">object</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="s">"keybinds"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_keysPressedToInput</span><span class="p">(</span><span class="n">mock_keybinds</span><span class="p">,</span> <span class="n">test_input_keys</span><span class="p">,</span> <span class="n">expected_buttons</span><span class="p">):</span>
+    <span class="n">mock_keybinds</span><span class="p">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">default_keybinds</span>
+    <span class="c1"># ...
+</span></code></pre></div></div>
+
+<p>but this caused a strange KeyError when running the test.</p>
+
+<p>The annotation format of <code class="language-plaintext highlighter-rouge">@mock.patch.object(inputs, "keybinds", default_keybinds)</code>
+is (one of) the correct way(s) to patch out <code class="language-plaintext highlighter-rouge">keybinds</code> for a different object <code class="language-plaintext highlighter-rouge">default_keybinds</code>,
+I had apparently confused <code class="language-plaintext highlighter-rouge">return_value</code> for the object itself.</p>
+
+<p>The final, parametrized version of <code class="language-plaintext highlighter-rouge">test_keysPressedToInput()</code> looks like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/test_inputs.py
+</span><span class="n">keysPressedToInput_testcases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># single key
+</span>    <span class="p">([</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_z</span><span class="p">],</span>
+     <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">]),</span>
+    
+    <span class="c1"># all single keys
+</span>    <span class="p">([</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_z</span><span class="p">,</span> <span class="nb">locals</span><span class="p">.</span><span class="n">K_x</span><span class="p">,</span> <span class="nb">locals</span><span class="p">.</span><span class="n">K_c</span><span class="p">,</span> <span class="nb">locals</span><span class="p">.</span><span class="n">K_v</span><span class="p">,</span> <span class="nb">locals</span><span class="p">.</span><span class="n">K_d</span><span class="p">],</span>
+     <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">HEAVY</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DUST</span><span class="p">]),</span>
+    
+    <span class="c1"># macro keys
+</span>    <span class="p">([</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_f</span><span class="p">],</span>
+     <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKS</span><span class="p">]),</span>
+    
+    <span class="c1"># multiple macro keys
+</span>    <span class="p">([</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_f</span><span class="p">,</span> <span class="nb">locals</span><span class="p">.</span><span class="n">K_h</span><span class="p">],</span>
+     <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">DUST</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKS</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PD</span><span class="p">]),</span>
+    
+    <span class="c1"># macro + single
+</span>    <span class="p">([</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_z</span><span class="p">,</span> <span class="nb">locals</span><span class="p">.</span><span class="n">K_f</span><span class="p">],</span>
+     <span class="p">[</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">SLASH</span><span class="p">,</span> <span class="n">Button</span><span class="p">.</span><span class="n">MACRO_PKS</span><span class="p">]),</span>
+    
+    <span class="c1"># simple SOCD
+</span>    <span class="p">([</span><span class="nb">locals</span><span class="p">.</span><span class="n">K_7</span><span class="p">,</span> <span class="nb">locals</span><span class="p">.</span><span class="n">K_9</span><span class="p">],</span>
+     <span class="p">[])</span>
+<span class="p">]</span>
+
+<span class="c1"># Note: Mocking keybinds to default prevents test from breaking when hardcoded keys change
+</span><span class="o">@</span><span class="n">pytest</span><span class="p">.</span><span class="n">mark</span><span class="p">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s">"test_input_keys, expected_buttons"</span><span class="p">,</span> <span class="n">keysPressedToInput_testcases</span><span class="p">)</span>
+<span class="o">@</span><span class="n">mock</span><span class="p">.</span><span class="n">patch</span><span class="p">.</span><span class="nb">object</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="s">"keybinds"</span><span class="p">,</span> <span class="n">default_keybinds</span><span class="p">)</span>
+<span class="o">@</span><span class="n">mock</span><span class="p">.</span><span class="n">patch</span><span class="p">.</span><span class="nb">object</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s">"get_pressed"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_keysPressedToInput</span><span class="p">(</span><span class="n">mock_key_get_pressed</span><span class="p">,</span> <span class="n">test_input_keys</span><span class="p">,</span> <span class="n">expected_buttons</span><span class="p">):</span>
+    <span class="n">mock_key_get_pressed</span><span class="p">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">create_key_mock</span><span class="p">(</span><span class="n">test_input_keys</span><span class="p">)</span>
+    <span class="n">current_frame</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="n">output</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">keysPressedToInput</span><span class="p">(</span><span class="n">current_frame</span><span class="p">)</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">create_buttons_dict</span><span class="p">(</span><span class="n">expected_buttons</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">assert</span> <span class="n">output</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre></div></div>
+
+<p>Note that we added another helper function <code class="language-plaintext highlighter-rouge">create_buttons_dict()</code> to convert our Button list in the <code class="language-plaintext highlighter-rouge">expected_buttons</code> parameter
+into a proper dict of Buttons (with <code class="language-plaintext highlighter-rouge">False</code> items for Buttons, since KeyErrors would occur if (eg.) Button.LEFT is missing
+from the Dict when <code class="language-plaintext highlighter-rouge">cleanSocdButtons()</code> runs).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/test_inputs.py
+</span><span class="k">def</span> <span class="nf">create_buttons_dict</span><span class="p">(</span><span class="n">pressed_buttons</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Button</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Button</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+    <span class="s">'''
+    Takes a list of Buttons and returns a proper dict[Button, bool].
+    '''</span>
+    <span class="n">buttons</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">button</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">Button</span><span class="p">):</span>
+        <span class="n">buttons</span><span class="p">[</span><span class="n">button</span><span class="p">]</span> <span class="o">=</span> <span class="n">button</span> <span class="ow">in</span> <span class="n">pressed_buttons</span>
+    <span class="k">return</span> <span class="n">buttons</span>
+</code></pre></div></div>
+
+<p>That helps us write a cleaner set of inputs and expected outputs in our test cases.</p>
+
+<blockquote>
+  <p>Note that we have to make a small change to the <code class="language-plaintext highlighter-rouge">Input()</code> class in <code class="language-plaintext highlighter-rouge">inputs</code> to handle the <code class="language-plaintext highlighter-rouge">==</code> equality operator
+in <code class="language-plaintext highlighter-rouge">assert output == expected</code>:
+<a href="https://stackoverflow.com/questions/390250/elegant-ways-to-support-equivalence-equality-in-python-classes">(See this post for more details.)</a></p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># inputs.py
+</span><span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Input</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">buttons</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">buttons</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">.</span><span class="n">start_frame</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">start_frame</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">.</span><span class="n">end_frame</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">end_frame</span>
+    <span class="k">return</span> <span class="nb">NotImplemented</span>
+</code></pre></div></div>
+
+<h3 id="test_inputhistory_append"><code class="language-plaintext highlighter-rouge">test_inputHistory_append()</code></h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test/test_inputs.py
+</span><span class="k">def</span> <span class="nf">test_inputHistory_append</span><span class="p">():</span>
+    <span class="n">ih</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">InputHistory</span><span class="p">(</span><span class="s">"P1"</span><span class="p">)</span>
+    <span class="n">ih</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">inputs</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">create_buttons_dict</span><span class="p">([</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">]),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">ih</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">inputs</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">create_buttons_dict</span><span class="p">([</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">]),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    
+    <span class="c1"># test input deduplication
+</span>    <span class="n">expected</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">create_buttons_dict</span><span class="p">([</span><span class="n">Button</span><span class="p">.</span><span class="n">PUNCH</span><span class="p">]),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ih</span><span class="p">.</span><span class="n">inputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">ih</span><span class="p">.</span><span class="n">inputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">expected</span>
+    
+    <span class="c1"># regular case
+</span>    <span class="n">ih</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">inputs</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">create_buttons_dict</span><span class="p">([</span><span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">]),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">create_buttons_dict</span><span class="p">([</span><span class="n">Button</span><span class="p">.</span><span class="n">KICK</span><span class="p">]),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ih</span><span class="p">.</span><span class="n">inputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">ih</span><span class="p">.</span><span class="n">inputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre></div></div>
+
+<p>Our last test is pretty easy as well, as it doesn’t require any mocks.
+The main behavior of <code class="language-plaintext highlighter-rouge">append()</code> that we’re interested in is the input deduplication,
+so we check both the duplicate and non-duplicate case.</p>
+
+<p>I think it’s fine in this case because it makes sense for the testcases to be sequential,
+but I think it’s slightly preferable to separate your tests into different cases instead of combining them into a single
+mega-testcase function for function X, because if multiple tests fail at the same time,
+the failure logs will only show the first failure.</p>
+
+<p><br />
+<br />
+<br /></p>
+
+<p>Those are the tests I wrote. Rather light for now, but I’ll definitely need to write quite a few more
+when I start laying out the complex particulars of the game state, and the game logic of the fighting game.</p>
+
+<p>For ease of viewing, the tests for my code can be found in the <code class="language-plaintext highlighter-rouge">test/</code> folder of my fighting game tutorial’s
+<a href="https://github.com/tuningdipsw/fighting-game-tutorial/tree/main/test">GitHub repository,</a>
+and will be updated with new tests as I publish new chapters.</p>
+
+<h3 id="bonus-the-debugger-a-useful-ide-feature">Bonus: The debugger, a useful IDE feature</h3>
+
+<p>A great feature of contemporary IDEs is the ability to easily set breakpoints in your code.</p>
+
+<p><img src="/assets/images/article2-1/debugger.png" alt="VSCode's debugger" /></p>
+
+<p>In VSCode, you set or unset breakpoints by clicking the red circles to the left of the line numbers (1),
+and the debugger will kick in when you choose to “Start Debugging (F5)”, or run a test with “Debug Test” instead of “Run Test”.</p>
+
+<p>After hitting a breakpoint, you can use the cassette buttons (2) to resume program flow, to step one line forward, etc, and
+check what’s in each variable in the Variable pane (3).</p>
+
+<p>The debugger is generally easier to handle than adding <code class="language-plaintext highlighter-rouge">print()</code> statements, finagling f-strings into the right formats to get
+those variables’ values, reading through all the printed logs at once, and then remembering to delete those <code class="language-plaintext highlighter-rouge">print()</code>
+statements afterwards; it’s an invaluable tool for helping you figure out why your program or your tests aren’t working the way
+you expect them to, and I recommend giving it a try.</p>
+
+<p>(Although I admit that adding a quick <code class="language-plaintext highlighter-rouge">print()</code> statement is my first instinct at times, too.)</p>
+
+<h2 id="additional-reading">Additional reading</h2>
+
+<p>The main notes I found when searching for guides on writing tests for Pygame
+were a pair of comments by u/bitcraft on the r/pygame subreddit.</p>
+<ul>
+  <li><a href="https://www.reddit.com/r/pygame/comments/5h177k/comment/dayky59">(1) unit testing for pygame</a></li>
+  <li><a href="https://www.reddit.com/r/pygame/comments/jqujoa">(2) How are you guys unit testing your game(s)?</a></li>
+</ul>
+
+<p>I found this post as well, and credit it for the <code class="language-plaintext highlighter-rouge">create_key_mock()</code> helper function,
+although it doesn’t offer much more insight than that.</p>
+<ul>
+  <li><a href="https://stackoverflow.com/questions/52917479/unit-testing-in-python-pygame-for-key-get-pressed">StackOverflow post that suggested mocking pg.key.get_pressed()</a></li>
+</ul>
+
+<p>The remaining links are more general, but very helpful guides on how to use unittest and pytest.</p>
+<ul>
+  <li><a href="https://code.visualstudio.com/docs/python/testing">VSCode’s guide on how to set up unit testing in Python</a></li>
+  <li><a href="https://www.datacamp.com/tutorial/pytest-tutorial-a-hands-on-guide-to-unit-testing">DataCamp’s tutorial on how to use PyTest, fixtures, and parametrize</a></li>
+  <li><a href="https://blog.miguelgrinberg.com/post/-how-to-write-unit-tests-in-python-part-1-fizz-buzz">Practical unittest and pytest example, part 1</a></li>
+  <li><a href="https://blog.miguelgrinberg.com/post/how-to-write-unit-tests-in-python-part-2-game-of-life">Practical unittest and pytest example, part 2</a></li>
+  <li><a href="https://docs.python.org/3/library/unittest.mock.html">Python docs on how to use unittest.mock</a></li>
+</ul>
+
+<p>While looking into ways to actually automate the running of my unit test suite, I found
+<a href="https://medium.com/thelorry-product-tech-data/unit-testing-and-continues-integration-ci-in-github-action-for-python-programming-c8ad57fae3a1">this tutorial on how to set up a GitHub action</a>
+to run the test and reject failing code after any push to the GitHub repository,
+but this seemed excessive for a personal project that I was going to
+test on my own local setup, so I did not attempt this.</p>
+
+<h2 id="advance-to-the-next-article">Advance to the next article</h2>
+
+<p>I hope this article was able to help you set up tests for your own game, and perhaps
+realize that doing so isn’t as hard as you might have feared it was.</p>
+
+<p>Let’s return to developing our game in article #3.</p>
+
+<p><a href="/fgtutorial/2023/02/26/article3-game-state-1.html">» Next: #3: Game state</a></p>
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = "https://tuningdipsw.github.io/fgtutorial/2023/02/12/article2-1-unit-testing-examples.html";
+	this.page.identifier = "/fgtutorial/2023/02/12/article2-1-unit-testing-examples.html";
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://tuning-2.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  </body>
+</html>

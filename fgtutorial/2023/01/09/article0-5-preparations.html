@@ -1,0 +1,383 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Let's make a fighting game #0.5: Preparations</title>
+	<link rel="stylesheet" href="/assets/css/styles.css">
+	<link type="application/atom+xml" rel="alternate" href="https://tuningdipsw.github.io/pages/tuningdipsw/feed.xml" title="Home of one of the Hellsinker. players of all time" />
+	<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Let’s make a fighting game #0.5: Preparations | Home of one of the Hellsinker. players of all time</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Let’s make a fighting game #0.5: Preparations" />
+<meta name="author" content="minogame" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="« Prev: #0: The heart Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. Even after sitting through the previous article, we still have a bit of preparation to complete before we can get started. Let’s get our prerequisites sorted out." />
+<meta property="og:description" content="« Prev: #0: The heart Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. Even after sitting through the previous article, we still have a bit of preparation to complete before we can get started. Let’s get our prerequisites sorted out." />
+<link rel="canonical" href="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/09/article0-5-preparations.html" />
+<meta property="og:url" content="https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/09/article0-5-preparations.html" />
+<meta property="og:site_name" content="Home of one of the Hellsinker. players of all time" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-01-09T21:08:30+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Let’s make a fighting game #0.5: Preparations" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"minogame"},"dateModified":"2023-01-09T21:08:30+00:00","datePublished":"2023-01-09T21:08:30+00:00","description":"« Prev: #0: The heart Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using the Python game development library Pygame. Even after sitting through the previous article, we still have a bit of preparation to complete before we can get started. Let’s get our prerequisites sorted out.","headline":"Let’s make a fighting game #0.5: Preparations","mainEntityOfPage":{"@type":"WebPage","@id":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/09/article0-5-preparations.html"},"url":"https://tuningdipsw.github.io/pages/tuningdipsw/fgtutorial/2023/01/09/article0-5-preparations.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body>
+	<div class="page sidebar">
+    <nav class="top">
+<table>
+<tr>
+  
+  <td>
+    <a href="/" >
+      Home
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/about/" >
+      About
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/table-of-contents.html" >
+      Contents
+    </a>
+  <td class="gap">
+  
+  <td>
+    <a href="/staff.html" >
+      Author
+    </a>
+  <td class="gap">
+  
+</tr>
+</table
+</nav>
+
+    <h1 class="pagetitle">TUNINGDIPSW</h1>
+	<h4>Instructional website for a fighting game developer</h4>
+	<h2> Let's make a fighting game #0.5: Preparations </h2>
+	<div class="content">
+    <p>
+  09 Jan 2023
+  
+  
+    - <a href="/authors/tuningdipsw.html">TUNING DIPSW (Andrew Hsu)</a>
+  
+</p>
+
+<div id="table-of-contents">
+  <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#install-python">Install Python</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#aside-a-first-roadblock-strategies-for-bugs">Aside: A first roadblock (Strategies for bugs)</a></li>
+<li class="toc-entry toc-h3"><a href="#additional-reading">Additional reading</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#2023212-new-install-pygame-community-edition">(2023/2/12: New) Install Pygame Community Edition</a></li>
+<li class="toc-entry toc-h2"><a href="#install-and-configure-your-ide-of-choice">Install and configure your IDE of choice</a></li>
+<li class="toc-entry toc-h2"><a href="#optional-set-up-version-control-software-git">(Optional) Set up Version Control Software (Git)</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#motivations-for-using-vcs">Motivations for using VCS</a></li>
+<li class="toc-entry toc-h3"><a href="#additional-reading-1">Additional reading</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#at-last">At Last</a></li>
+</ul> 
+</div>
+
+<p><a href="/fgtutorial/2023/01/06/article0-heart.html">« Prev: #0: The heart</a></p>
+
+<p>Good day. In this series of articles, I’ll be attempting to program a simple 2D fighting game using
+the Python game development library Pygame.</p>
+
+<p>Even after sitting through the previous article, we still have a bit of preparation to complete
+before we can get started. Let’s get our prerequisites sorted out.</p>
+
+<!--more-->
+
+<h2 id="install-python">Install Python</h2>
+
+<p><a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></p>
+
+<p>(2023/2/13)
+The original Pygame library was only compatible with Python 3.10, forcing users
+to download a less-recent version of Python,
+but the <a href="https://github.com/pygame-community/pygame-ce">Pygame community edition library</a>
+that has taken its place is compatible with Python 3.11.</p>
+
+<p>Confirm the installation by running</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 --version
+</code></pre></div></div>
+
+<p>in a terminal.</p>
+
+<h3 id="aside-a-first-roadblock-strategies-for-bugs">Aside: A first roadblock (Strategies for bugs)</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'python' is not recognized as an internal or external command,
+operable program or batch file.
+</code></pre></div></div>
+
+<p>You might run into your first error here. Don’t panic, errors are going to happen a lot.</p>
+
+<ul>
+  <li>The instructions you’re following may be out-of-date, or even outright wrong.</li>
+  <li>You may have simply mistyped something; maybe you read a 0 (zero) as an O (capital o),
+or your Mac autocorrected a <code class="language-plaintext highlighter-rouge">--</code> (two hyphens, often used for command-line flag) into a – (em dash).</li>
+  <li>Maybe you just did something wrong. If it won’t take too long, run it again from the beginning
+just to be sure. <em>(Do a sanity check)</em></li>
+  <li>Sometimes your computer is just very strange and nothing anyone has suggested works.
+I’m very sorry if you have to go through one of these.</li>
+</ul>
+
+<p>Whatever the case, here’s some of the basic steps you should try to solve an error:</p>
+
+<ol>
+  <li>Try to reproduce the error.
+    <ul>
+      <li>Learning the possible conditions that may cause it might help you understand why it happens.</li>
+    </ul>
+  </li>
+  <li>Paste the error text into Google.
+    <ul>
+      <li>The exact error text will often have bits specific to your program or particular run that
+obviously won’t appear in others’ questions, so you will likely need to pare down the text a bit.</li>
+      <li>Sometimes the error readout/stack trace will have multiple errors in it. More often than not, you
+only want the one closest to the bottom since it’s the one causing the rest of errors, but give the others a skim.</li>
+    </ul>
+  </li>
+  <li><a href="https://twitter.com/b0rk/status/1570463473011920897">Stop and read the error again, more carefully this time.</a></li>
+  <li>After giving the problem an honest try, ask others for help on StackOverflow or a relevant Discord.
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Rubber_duck_debugging">Just the act of trying to cleanly articulate what’s wrong may give you insight.</a></li>
+    </ul>
+  </li>
+</ol>
+
+<aside>
+<i>"Why are you using Windows?"</i>
+<br />
+<br />
+It's true:
+The fickly-updated, too-user-"friendly" Windows is the root of many, many compatibility issues in programming,
+so most programmers recommend working on Mac or Linux instead for pure coding.
+<br />
+<br />
+However, the inconvenience of booting up Linux on an emulator/another disc on my cheeks laptop
+completely torpedoes my motivation to write articles or code, so I've stubbornly
+arranged my workflow around working past Windows' idiosyncrasies.
+<br />
+<br />
+It is in no way optimal, but it has proven manageable thus far.
+I may switch to Linux someday, but for the time being, this is a compromise I have made to deal with my own mental blocks.
+</aside>
+
+<p>Advice for this error on Windows, if you can’t figure it out:</p>
+<p class="spoiler">
+On Windows, this is usually caused by the location of the newly-installed Python executable being absent from the PATH
+environment variable. Try searching for "how to add python path environment variable windows".
+You may also need to restart your computer for the environment variable changes to take effect.
+</p>
+
+<h3 id="additional-reading">Additional reading</h3>
+
+<ul>
+  <li><a href="https://stackoverflow.com/help/how-to-ask">StackOverflow’s How to Ask</a></li>
+  <li><a href="https://www.chiark.greenend.org.uk/~sgtatham/bugs.html">How to Report Bugs Effectively</a></li>
+  <li><a href="http://catb.org/~esr/faqs/smart-questions.html">How to Ask Questions the Smart Way</a></li>
+</ul>
+
+<p>The latter two are a bit lengthy and harsh to the reader, but if you’re willing to swallow your pride,
+all three of these articles teach you best practices for how to ask for help in a way that will improve your
+chances of getting a good answer.</p>
+
+<p>I recommend giving them a read when you have a bit of time.</p>
+
+<h2 id="2023212-new-install-pygame-community-edition">(2023/2/12: New) Install Pygame Community Edition</h2>
+
+<p>Due to issues with the original Pygame project being able to update to Python 3.11 compatibility,
+a new fork of the Pygame project, <a href="https://github.com/pygame-community/pygame-ce">pygame-community</a>,
+has been adopted to support Python 3.11 and more frequent updates.</p>
+
+<p><a href="https://github.com/pygame-community/pygame-ce#installation">Installation is pretty straightforward:</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install pygame-ce
+</code></pre></div></div>
+
+<p>You can uninstall the original pygame if you had it installed; you should not need to adjust any other files.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip uninstall pygame
+</code></pre></div></div>
+
+<p>Again, as a sanity check, try getting <a href="https://pyga.me/docs/#quick-start">a quick program</a> to work.
+You might need to install an IDE first, though:</p>
+
+<h2 id="install-and-configure-your-ide-of-choice">Install and configure your IDE of choice</h2>
+
+<p>As mentioned in #0, don’t settle for accepting pain points, try to eliminate or reduce them
+however you can. An IDE (Integrated Development Environment) should be the program you write most, if not
+all of your code in, as they provide much-needed quality-of-life features (eg. text autocompletion,
+bracket highlighting, test runners plugins, Git integration) for development. I recommend
+<a href="https://code.visualstudio.com/download">Visual Studio Code</a>, an excellent, free pick with robust
+support from its developers and plugin writers.</p>
+
+<p>Another option I found for Python is Spyder IDE + Anaconda. I haven’t tried this myself, but it was
+recommended to me by <a href="https://www.patternsgameprog.com/discover-python-and-patterns-1">another Pygame tutorial</a>
+I found very helpful.</p>
+
+<aside>
+Guides for setting up Python linting and type checking on VSCode:
+<a href="https://code.visualstudio.com/docs/python/linting">(1)</a>
+<a href="https://www.emmanuelgautier.com/blog/enable-vscode-python-type-checking">(2)</a>
+</aside>
+
+<p>Some optional settings or plugins you might like to set up at this point include
+a <a href="https://realpython.com/python-code-quality/#linters">linter</a>
+or a <a href="https://realpython.com/python-type-checking/">type checker</a>.</p>
+
+<h2 id="optional-set-up-version-control-software-git">(Optional) Set up Version Control Software (Git)</h2>
+
+<p>You don’t need to set up VCS to write code, but having it set up will help you keep track of
+your project changes. There are a number of VCS options out there, but Git is the one I’m familiar with.</p>
+
+<h3 id="motivations-for-using-vcs">Motivations for using VCS</h3>
+
+<ul>
+  <li>You’d like to segment your changes into nice, discrete chunks instead of letting everything
+blend together into a continuous stream of changes. <em>(git commit)</em></li>
+  <li>You’d like to be able to see which parts of your program you’ve made changes to since your last commit.
+<em>(git diff, also displayed passively in IDEs with Git integration)</em></li>
+  <li>You’d like the ability to view, and in a worst-case scenario, revert back to, previous versions
+of your codebase. <em>(git revert)</em></li>
+  <li>Similarly, being able to easily and safely apply and unapply a set of temporary changes to
+see what the difference looks like. <em>(git stash)</em></li>
+  <li>You’d like to be able to fluidly upload and download a record of your changes to/from the web,
+in the off-chance your filesystem explodes. <em>(remote repository like GitHub)</em></li>
+</ul>
+
+<p>I would consider having the ability to do all of these an integral part of development QOL.
+Better to have it and not need it than the other way around, after all.</p>
+
+<aside>
+* There is a GUI (Graphical User Interface) version of Git available for users who don't wish to
+learn the command line commands. I find it much faster to use the command line instead, but it is an option
+available to you to help you learn the basic workflow.
+</aside>
+
+<p>Git can be intimidating to learn
+due to the combination of having a very long command list available and being invoked through the
+command line*, but these are things that can be overcome. Take a bit of time, learn something new,
+and you’ll have a handy new tool in your toolbox.</p>
+
+<p>Here is a summary of the basic Git workflow most of your Git usage will resemble:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># In the root of your project folder, generate a Git repository</span>
+<span class="c"># Only need to do this once</span>
+git init
+
+<span class="c"># Get a look at the list of changed/uncommitted files</span>
+git status
+
+<span class="c"># Add a single file to the list of files to be committed</span>
+git add filename.txt
+
+<span class="c"># OR Use a pattern and the wildcard * to add all files starting with "filename."</span>
+<span class="c"># to the list of files to be committed</span>
+git add filename.<span class="k">*</span> 
+
+<span class="c"># OR What the heck, add all files</span>
+git add <span class="nb">.</span> 
+
+<span class="c"># Look again, check which files have been staged</span>
+git status 
+
+<span class="c"># Ok, not that file, put that one back</span>
+<span class="c"># Unstage this file from the list of files to be included in the next commit</span>
+<span class="c"># Maybe write a .gitignore file to automatically prevent this one from ever getting added</span>
+git restore <span class="nt">--staged</span> passwords.txt
+
+<span class="c"># Tie it all up in a bow with a message</span>
+git commit <span class="nt">-m</span> <span class="s2">"Descriptive message summarizing this chunk of changes"</span>
+
+<span class="c"># View the newly-updated commit log for your sanity</span>
+git log
+</code></pre></div></div>
+
+<p>Some other useful commands include:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Split into a new development branch (eg. for experimental feature</span>
+<span class="c"># or a new version release)</span>
+<span class="c"># For your personal work, you might not need this, but it is an option</span>
+git branch
+git branch list
+git checkout
+
+<span class="c"># Revert to last commit, saving all uncommitted changes away</span>
+<span class="c"># on an invisible stack saved by Git</span>
+git stash
+
+<span class="c"># Put the last-stashed set of changes back into play, popping it off</span>
+<span class="c"># the stack of set-of-changes stored by Git</span>
+git stash pop
+
+<span class="c"># Quickly undo all uncommitted changes to a file</span>
+<span class="c"># Overlaps with the command to unstage a file from the list of files to be included in a commit</span>
+<span class="c"># just with no --staged flag, try very hard to avoid using this accidentally</span>
+<span class="c"># ! This can erase all your changes even if saved, and can't be undone through Git, be VERY careful</span>
+git restore filename.txt
+
+<span class="c"># Read more about this and soft/hard reverts at your own leisure</span>
+git revert
+</code></pre></div></div>
+
+<h3 id="additional-reading-1">Additional reading</h3>
+
+<ul>
+  <li><a href="https://docs.github.com/en/get-started/using-git/about-git">https://docs.github.com/en/get-started/using-git/about-git</a></li>
+  <li><a href="https://docs.github.com/en/get-started/quickstart/set-up-git">https://docs.github.com/en/get-started/quickstart/set-up-git</a></li>
+  <li><a href="https://training.github.com/downloads/github-git-cheat-sheet/">https://training.github.com/downloads/github-git-cheat-sheet/</a></li>
+</ul>
+
+<h2 id="at-last">At Last</h2>
+
+<p>Excellent. The necessary software has been installed, and your dev tools are all in place.
+You’re ready to write some code.</p>
+
+<p>Let’s get started.</p>
+
+<p>…Next time.</p>
+
+<p><img src="/assets/images/article0-5/pewgf.png" alt="1koma of Iku Nagae punching her monitor" /></p>
+
+<p><a href="/fgtutorial/2023/01/27/article0-8-rollback-prep.html">» Next: #0.8: Rollback (pre-reading)</a></p>
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = "https://tuningdipsw.github.io/fgtutorial/2023/01/09/article0-5-preparations.html";
+	this.page.identifier = "/fgtutorial/2023/01/09/article0-5-preparations.html";
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://tuning-2.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  </body>
+</html>
